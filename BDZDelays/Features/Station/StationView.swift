@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  StationView.swift
 //  BDZDelays
 //
 //  Created by Alexander Ignatov on 21.04.23.
@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct StationView: View {
+    let vm: StationViewModel
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -19,8 +21,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct StationView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        StationView(vm: .init(name: "Горна Оряховица"))
     }
 }

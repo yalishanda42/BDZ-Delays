@@ -11,7 +11,7 @@ import SwiftUI
 struct BDZDelaysApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Text("Not implemented.")
         }
     }
 }
