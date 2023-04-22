@@ -11,7 +11,13 @@ import SwiftUI
 struct BDZDelaysApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("Not implemented.")
+            StationPresentationView(store: .init(
+                initialState: .init(station: .sofia),
+                reducer: StationReducer(),
+                prepareDependencies: {
+                    $0.context = .live
+                }
+            ))
         }
     }
 }

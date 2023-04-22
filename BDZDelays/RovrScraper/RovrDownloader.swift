@@ -22,7 +22,7 @@ enum RovrDownloader {
             result.setValue("https://rovr.info", forHTTPHeaderField: "Origin")
             result.setValue("rovr.info", forHTTPHeaderField: "Host")
             result.setValue("https://rovr.info/", forHTTPHeaderField: "Referer")
-//            result.setValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Safari/605.1.15", forHTTPHeaderField: "User-Agent")
+            result.setValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Safari/605.1.15", forHTTPHeaderField: "User-Agent")
             
             let data: [String: String] = [
                 "orientation": "P",
