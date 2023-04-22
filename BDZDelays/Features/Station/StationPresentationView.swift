@@ -30,7 +30,9 @@ fileprivate extension ViewStore where ViewState == StationReducer.State, ViewAct
         .init(
             name: state.station.name,
             trains: state.trains.map { $0.asViewModel },
-            updateDisplayTime: state.lastUpdateTime.hoursAndMinutes,
+            refreshState: state.loadingState.asRefreshIndicatorState,
+            updateDisplayTime: state.lastUpdateTime
+                .map { $0.hoursAndMinutes },
             refreshAction: { self.send(.refresh) }
         )
     }
@@ -46,6 +48,17 @@ fileprivate extension StationReducer.State.TrainAtStation {
             arrival: arrival.map { $0.asDisplayTime },
             departure: departure.map { $0.asDisplayTime }
         )
+    }
+}
+
+fileprivate extension StationReducer.State.RefreshState {
+    var asRefreshIndicatorState: StationViewModel.RefreshIndicatorState {
+        switch self {
+        case .disabled: return .hidden
+        case .enabled: return .refresh
+        case .failed: return .warning
+        case .loading: return .loading
+        }
     }
 }
 
@@ -103,9 +116,7 @@ struct StationPresentationView_Previews: PreviewProvider {
     static var previews: some View {
         StationPresentationView(store: .init(
             initialState: .init(
-                station: .gornaOryahovitsa,
-                loadingState: .enabled,
-                lastUpdateTime: Date()
+                station: .gornaOryahovitsa
             ),
             reducer: StationReducer(),
             prepareDependencies: {

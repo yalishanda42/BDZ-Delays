@@ -12,9 +12,9 @@ struct StationReducer: ReducerProtocol {
     
     struct State: Equatable {
         let station: Station
-        var loadingState: RefreshState
+        var loadingState: RefreshState = .loading
         var trains: IdentifiedArrayOf<TrainAtStation> = []
-        var lastUpdateTime: Date
+        var lastUpdateTime: Date?
     }
     
     enum Action: Equatable {

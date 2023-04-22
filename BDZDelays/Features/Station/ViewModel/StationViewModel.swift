@@ -10,6 +10,16 @@ import Foundation
 struct StationViewModel {
     let name: String
     let trains: [TrainViewModel]
-    let updateDisplayTime: String
+    let refreshState: RefreshIndicatorState
+    let updateDisplayTime: String?
     let refreshAction: () -> Void
+}
+
+extension StationViewModel {
+    enum RefreshIndicatorState {
+        case hidden
+        case loading
+        case warning
+        case refresh
+    }
 }

@@ -15,11 +15,27 @@ struct StationView: View {
             content
                 .navigationTitle(vm.name)
                 .toolbar {
-                    Text(vm.updateDisplayTime)
-                    Button {
-                        vm.refreshAction()
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
+                    if let time = vm.updateDisplayTime {
+                        Text(time)
+                    }
+                    
+                    switch vm.refreshState {
+                    case .loading where !vm.trains.isEmpty:
+                        ProgressView()
+                    case .warning:
+                        Button {
+                            vm.refreshAction()
+                        } label: {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                        }
+                    case .refresh:
+                        Button {
+                            vm.refreshAction()
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                    default:
+                        EmptyView()
                     }
                 }
         }
@@ -27,7 +43,9 @@ struct StationView: View {
     
     private var content: some View {
         if vm.trains.isEmpty {
-            return AnyView(Text("Няма влакове за следващите 6 часа."))
+            return vm.refreshState == .loading
+                ? AnyView(ProgressView())
+                : AnyView(Text("Няма влакове за следващите 6 часа."))
         } else {
             return AnyView(
                 List {
@@ -48,6 +66,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: TrainView_Previews.testVMs,
+            refreshState: .refresh,
             updateDisplayTime: "21:12",
             refreshAction: {}
         ))
@@ -57,6 +76,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: TrainView_Previews.testVMs,
+            refreshState: .loading,
             updateDisplayTime: "21:12",
             refreshAction: {}
         ))
@@ -66,6 +86,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: [],
+            refreshState: .hidden,
             updateDisplayTime: "21:12",
             refreshAction: {}
         ))
@@ -75,10 +96,21 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: [],
+            refreshState: .warning,
             updateDisplayTime: "21:12",
             refreshAction: {}
         ))
         .preferredColorScheme(.dark)
         .previewDisplayName("Dark empty")
+        
+        StationView(vm: .init(
+            name: "Горна Оряховица",
+            trains: [],
+            refreshState: .loading,
+            updateDisplayTime: nil,
+            refreshAction: {}
+        ))
+        .preferredColorScheme(.light)
+        .previewDisplayName("Light loading empty")
     }
 }
