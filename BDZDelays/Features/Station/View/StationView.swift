@@ -15,7 +15,7 @@ struct StationView: View {
             content
                 .navigationTitle(vm.name)
                 .toolbar {
-                    Text(vm.updatDisplayTime)
+                    Text(vm.updateDisplayTime)
                     Button {
                         vm.refreshAction()
                     } label: {
@@ -48,7 +48,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: TrainView_Previews.testVMs,
-            updatDisplayTime: "21:12",
+            updateDisplayTime: "21:12",
             refreshAction: {}
         ))
         .preferredColorScheme(.light)
@@ -57,7 +57,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: TrainView_Previews.testVMs,
-            updatDisplayTime: "21:12",
+            updateDisplayTime: "21:12",
             refreshAction: {}
         ))
         .preferredColorScheme(.dark)
@@ -66,7 +66,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: [],
-            updatDisplayTime: "21:12",
+            updateDisplayTime: "21:12",
             refreshAction: {}
         ))
         .preferredColorScheme(.light)
@@ -75,7 +75,7 @@ struct StationView_Previews: PreviewProvider {
         StationView(vm: .init(
             name: "Горна Оряховица",
             trains: [],
-            updatDisplayTime: "21:12",
+            updateDisplayTime: "21:12",
             refreshAction: {}
         ))
         .preferredColorScheme(.dark)
