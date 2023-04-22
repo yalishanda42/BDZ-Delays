@@ -87,7 +87,7 @@ private struct DisplayTimeView: View {
 // MARK: - Previews
 
 struct TrainView_Previews: PreviewProvider {
-    private static var testVMs: [TrainViewModel] {
+    static var testVMs: [TrainViewModel] {
         [
             TrainViewModel(
                 id: "БВ 2612",

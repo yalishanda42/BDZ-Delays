@@ -9,4 +9,7 @@ import Foundation
 
 struct StationViewModel {
     let name: String
+    let trains: [TrainViewModel]
+    let updatDisplayTime: String
+    let refreshAction: () -> Void
 }
