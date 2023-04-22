@@ -7,21 +7,19 @@
 
 import Foundation
 
-struct TrainNumber {
+struct TrainNumber: Hashable, Equatable {
     let type: TrainType
     let number: Int
 }
 
-enum TrainType {
+enum TrainType: Hashable, Equatable {
     case suburban
     case normal
     case fast
     case international
+    case other(String)
 }
 
-extension TrainType: Hashable {
-}
-
-extension TrainNumber: Identifiable, Hashable {
+extension TrainNumber: Identifiable {
     var id: Self { self }
 }

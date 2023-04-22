@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum Station {
+enum Station: Equatable {
     case sofia
     case gornaOryahovitsa
+    
+    case other(String)
 }

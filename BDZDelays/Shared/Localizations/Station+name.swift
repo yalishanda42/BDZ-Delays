@@ -12,6 +12,7 @@ extension Station {
         switch self {
         case .sofia: return "София"
         case .gornaOryahovitsa: return "Горна Оряховица"
+        case .other(let name): return name
         }
     }
 }

@@ -18,6 +18,8 @@ extension TrainType {
             return "БВ"
         case .international:
             return "МБВ"
+        case .other(let string):
+            return string
         }
     }
 }

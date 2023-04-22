@@ -12,5 +12,5 @@ struct StationRepository {
 }
 
 enum StationRepositoryError {
-    case couldntFetch
+    case parseError
 }
