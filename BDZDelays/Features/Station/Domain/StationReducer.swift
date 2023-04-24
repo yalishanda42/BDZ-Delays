@@ -13,14 +13,13 @@ struct StationReducer: ReducerProtocol {
     struct State: Equatable {
         let station: Station
         var loadingState: RefreshState = .loading
-        var trains: IdentifiedArrayOf<TrainAtStation> = []
+        var trains: [TrainAtStation] = []
         var lastUpdateTime: Date?
     }
     
     enum Action: Equatable {
         case refresh
-        case load(IdentifiedArrayOf<State.TrainAtStation>)
-        case receiveError
+        case receive(TaskResult<[State.TrainAtStation]>)
         case enableRefresh
     }
     
@@ -28,31 +27,22 @@ struct StationReducer: ReducerProtocol {
     @Dependency(\.date.now) var now
     @Dependency(\.stationRepository) var stationRepository
     
-    struct LoadingCancellableID {}
-    
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .refresh:
             state.loadingState = .loading
-            return .run { [station = state.station] send in
-                do {
-                    try Task.checkCancellation()
-                    let trains = try await stationRepository.fetchTrainsAtStation(station)
-                    try Task.checkCancellation()
-                    await send(.load(.init(uniqueElements: trains)))
-                } catch is CancellationError {
-                    return  // do nothing
-                } catch {
-                    await send(.receiveError)
-                }
-            }.cancellable(id: LoadingCancellableID.self, cancelInFlight: true)
+            return .task { [station = state.station] in
+                await .receive(TaskResult {
+                    try await stationRepository.fetchTrainsAtStation(station)
+                })
+            }
             
-        case .load(let trains):
+        case .receive(.success(let trains)):
             state.lastUpdateTime = now
             state.trains = trains
-            state.loadingState = .disabled
+            state.loadingState = .enabled
         
-        case .receiveError:
+        case .receive(.failure):
             state.loadingState = .failed
             return .run { send in
                 for await _ in clock.timer(interval: .seconds(5)) {
