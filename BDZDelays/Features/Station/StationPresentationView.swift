@@ -11,7 +11,7 @@ import ComposableArchitecture
 // MARK: - View
 
 struct StationPresentationView: View {
-    let store: Store<StationReducer.State, StationReducer.Action>
+    let store: StoreOf<StationReducer>
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
