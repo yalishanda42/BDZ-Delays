@@ -16,11 +16,12 @@ enum RovrHTMLScraper {
     }
     
     static func decode(pageData: Data) throws -> String {
-        if let decoded = String(data: pageData, encoding: .windowsCP1251) {
-            return decoded
-        }
+//        if let decoded = String(data: pageData, encoding: .windowsCP1251) {
+//            return decoded
+//        }
+        return String(decoding: pageData, as: UTF8.self)
         
-        throw ParseError.dataDecodingError
+//        throw ParseError.dataDecodingError
     }
     
     struct TrainData {
@@ -81,8 +82,8 @@ enum RovrHTMLScraper {
 fileprivate extension RovrHTMLScraper.TrainData {
     init(firstTr: Element, secondTr: Element, thirdTr: Element) throws {
         self.init(
-            type: try firstTr.child(0).text().split(separator: " ")[0].string,
-            number: try firstTr.child(0).text().split(separator: " ")[1].string,
+            type: try firstTr.child(0).text().split(separator: CharacterClass.whitespace)[0].string,
+            number: try firstTr.child(0).text().split(separator: CharacterClass.whitespace)[1].string,
             to: try secondTr.child(0).text().dropFirst(3).string,  // removes "за "
             from: try thirdTr.child(0).text().nilIfEmpty?.dropFirst(3).string,  // removes "от "
             isOperating: try !thirdTr.child(1).text().isEmpty,
