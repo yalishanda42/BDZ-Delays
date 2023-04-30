@@ -14,16 +14,7 @@ struct TrainView: View {
         VStack(spacing: 0) {
             // train info header
             ZStack {
-                switch vm.operation {
-                case .notYetOperating:
-                    Color.teal
-                case .operating:
-                    Color.green
-                case .inStation:
-                    Color.purple
-                case .leftStationOrTerminated:
-                    Color.gray
-                }
+                Color.teal.opacity(0.69)
                 
                 VStack(spacing: 0) {
                     Text(vm.id).bold()
@@ -41,6 +32,8 @@ struct TrainView: View {
                 .padding(.horizontal, 8)
                 .foregroundColor(.black)
             }
+            
+            Color.fromOperationState(vm.operation).frame(height: 4)
             
             // arrival/departure timetable
             HStack(alignment: .top) {
@@ -88,13 +81,30 @@ private struct DisplayTimeView: View {
                 case .operating where time.delay == nil:
                     Text("навреме").foregroundColor(.green)
                 case .leftStationOrTerminated:
-                    Text(pastEventText).foregroundColor(.purple)
+                    Text(pastEventText).foregroundColor(
+                        .fromOperationState(.leftStationOrTerminated)
+                    )
                 default:
                     EmptyView()
                 }
             } else {
                 Text("---")
             }
+        }
+    }
+}
+
+fileprivate extension Color {
+    static func fromOperationState(_ state: TrainViewModel.OperationState) -> Self {
+        switch state {
+        case .notYetOperating:
+            return .teal
+        case .operating:
+            return .green
+        case .inStation:
+            return .purple
+        case .leftStationOrTerminated:
+            return .gray
         }
     }
 }

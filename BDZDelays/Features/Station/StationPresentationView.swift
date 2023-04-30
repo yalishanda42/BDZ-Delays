@@ -71,13 +71,13 @@ fileprivate extension StationReducer.State.TrainAtStation {
         }
     }
     
-    private func displayTimeFrom(_ scheduled: Date) -> TrainViewModel.DisplayTime {
+    func displayTimeFrom(_ scheduled: Date) -> TrainViewModel.DisplayTime {
         .init(
             scheduled: scheduled.hoursAndMinutes,
-            delay: delay.map { .init(
+            delay: delay.map { TrainViewModel.Delay(
                 minutes: $0.minutes,
                 estimate: scheduled.addingDuration($0).hoursAndMinutes
-            ) }
+            )}
         )
     }
 }
