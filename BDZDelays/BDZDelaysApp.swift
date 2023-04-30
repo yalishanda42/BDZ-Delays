@@ -13,10 +13,7 @@ struct BDZDelaysApp: App {
         WindowGroup {
             StationPresentationView(store: .init(
                 initialState: .init(station: .sofia),
-                reducer: StationReducer(),
-                prepareDependencies: {
-                    $0.context = .live
-                }
+                reducer: StationReducer()
             ))
         }
     }
