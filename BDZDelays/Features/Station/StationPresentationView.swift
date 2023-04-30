@@ -171,8 +171,8 @@ struct StationPresentationView_Previews: PreviewProvider {
                     type: .suburban,
                     number: 2112
                 ),
-                from: .sofia,
-                to: .gornaOryahovitsa,
+                from: .bulgarian(.sofia),
+                to: .bulgarian(.gornaOryahovitsa),
                 schedule: .departureOnly(Date(timeIntervalSince1970: 3600)),
                 delay: nil,
                 movement: .leavingStation
@@ -182,8 +182,8 @@ struct StationPresentationView_Previews: PreviewProvider {
                     type: .suburban,
                     number: 2113
                 ),
-                from: .sofia,
-                to: .gornaOryahovitsa,
+                from: .bulgarian(.sofia),
+                to: .bulgarian(.gornaOryahovitsa),
                 schedule: .departureOnly(Date(timeIntervalSince1970: 3600)),
                 delay: .seconds(240),
                 movement: .leavingStation
@@ -193,8 +193,8 @@ struct StationPresentationView_Previews: PreviewProvider {
                     type: .fast,
                     number: 2112
                 ),
-                from: .sofia,
-                to: .gornaOryahovitsa,
+                from: .bulgarian(.sofia),
+                to: .bulgarian(.gornaOryahovitsa),
                 schedule: .arrivalOnly(Date(timeIntervalSince1970: 3600)),
                 delay: .seconds(240),
                 movement: .inOperation
@@ -204,8 +204,8 @@ struct StationPresentationView_Previews: PreviewProvider {
                     type: .normal,
                     number: 2112
                 ),
-                from: .gornaOryahovitsa,
-                to: .sofia,
+                from: .bulgarian(.gornaOryahovitsa),
+                to: .bulgarian(.sofia),
                 schedule: .full(
                     arrival: Date(timeIntervalSince1970: 3600),
                     departure: Date(timeIntervalSince1970: 3660)

@@ -11,7 +11,7 @@ import ComposableArchitecture
 struct StationReducer: ReducerProtocol {
     
     struct State: Equatable {
-        let station: Station
+        let station: BGStation
         var loadingState: RefreshState = .loading
         var trains: [TrainAtStation] = []
         var lastUpdateTime: Date?

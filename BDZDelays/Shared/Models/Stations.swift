@@ -8,8 +8,11 @@
 import Foundation
 
 enum Station: Equatable {
+    case bulgarian(BGStation)
+    case other(String)
+}
+
+enum BGStation: Equatable, CaseIterable {
     case sofia
     case gornaOryahovitsa
-    
-    case other(String)
 }

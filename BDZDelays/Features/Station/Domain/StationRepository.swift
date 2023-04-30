@@ -8,7 +8,7 @@
 import Foundation
 
 struct StationRepository {
-    var fetchTrainsAtStation: (_ station: Station) async throws -> [StationReducer.State.TrainAtStation]
+    var fetchTrainsAtStation: (_ station: BGStation) async throws -> [StationReducer.State.TrainAtStation]
 }
 
 enum StationRepositoryError: Error {

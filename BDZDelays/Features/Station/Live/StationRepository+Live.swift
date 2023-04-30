@@ -24,13 +24,13 @@ extension StationRepository: DependencyKey {
 // MARK: - Convertions
 
 fileprivate extension StationReducer.State.TrainAtStation {
-    init(_ data: RovrHTMLScraper.TrainData, station: Station) throws {
+    init(_ data: RovrHTMLScraper.TrainData, station: BGStation) throws {
         self.init(
             number: TrainNumber(
                 type: try TrainType(data.type),
                 number: Int(data.number) ?? 0
             ),
-            from: data.from.map(Station.init) ?? station,
+            from: data.from.map(Station.init) ?? .bulgarian(station),
             to: Station(data.to),
             schedule: try .init(data),
             delay: data.delayMinutes.map { Duration.seconds($0 * 60) },
@@ -102,10 +102,21 @@ fileprivate extension TrainType {
 
 fileprivate extension Station {
     init(_ string: String) {
+        guard let bgStation = BGStation(string) else {
+            self = .other(string)
+            return
+        }
+        
+        self = .bulgarian(bgStation)
+    }
+}
+
+fileprivate extension BGStation {
+    init?(_ string: String) {
         switch string.lowercased() {
         case "софия": self = .sofia
         case "горна оряховица": self = .gornaOryahovitsa
-        default: self = .other(string)
+        default: return nil
         }
     }
     
@@ -115,7 +126,6 @@ fileprivate extension Station {
         switch self {
         case .sofia: return 18
         case .gornaOryahovitsa: return 238
-        case .other: return 0
         }
     }
 }
