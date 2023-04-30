@@ -14,7 +14,17 @@ struct TrainView: View {
         VStack(spacing: 0) {
             // train info header
             ZStack {
-                Color.teal
+                switch vm.operation {
+                case .notYetOperating:
+                    Color.teal
+                case .operating:
+                    Color.green
+                case .inStation:
+                    Color.purple
+                case .leftStationOrTerminated:
+                    Color.gray
+                }
+                
                 VStack(spacing: 0) {
                     Text(vm.id).bold()
                     HStack {
@@ -37,14 +47,18 @@ struct TrainView: View {
                 Spacer()
                 DisplayTimeView(
                     time: vm.arrival,
-                    title: "ПРИСТИГА"
+                    operation: vm.operation,
+                    title: "ПРИСТИГА",
+                    pastEventText: "пристигнал"
                 )
                 Spacer()
                 Divider()
                 Spacer()
                 DisplayTimeView(
                     time: vm.departure,
-                    title: "ЗАМИНАВА"
+                    operation: vm.operation,
+                    title: "ЗАМИНАВА",
+                    pastEventText: "заминал"
                 )
                 Spacer()
             }.padding(.vertical, 6)
@@ -54,31 +68,32 @@ struct TrainView: View {
 
 private struct DisplayTimeView: View {
     let time: TrainViewModel.DisplayTime?
+    let operation: TrainViewModel.OperationState
     let title: String
+    let pastEventText: String
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Text(title).bold().padding(.bottom, 5)
-            AnyView(timeView)
-        }
-    }
-    
-    private var timeView: any View {
-        switch self.time {
-        case .none:
-            return Text("---")
-        case let .some(.scheduled(time)):
-            return Text(time)
-        case let .some(.punctual(time)):
-            return Group {
-                Text(time)
-                Text("навреме").foregroundColor(.green)
-            }
-        case let .some(.delayed(scheduled: scheduled, delay: delay, estimate: estimate)):
-            return Group {
-                Text(scheduled)
-                Text("+ \(delay)' зак.").foregroundColor(.red)
-                Text("≈ \(estimate)")
+            
+            if let time = self.time {
+                Text(time.scheduled)
+                
+                if let delay = time.delay {
+                    Text("+ \(delay.minutes)' зак.").foregroundColor(.red)
+                    Text("≈ \(delay.estimate)")
+                }
+                
+                switch operation {
+                case .operating where time.delay == nil:
+                    Text("навреме").foregroundColor(.green)
+                case .leftStationOrTerminated:
+                    Text(pastEventText).foregroundColor(.purple)
+                default:
+                    EmptyView()
+                }
+            } else {
+                Text("---")
             }
         }
     }
@@ -90,11 +105,39 @@ struct TrainView_Previews: PreviewProvider {
     static var testVMs: [TrainViewModel] {
         [
             TrainViewModel(
+                id: "БВ 26128",
+                from: "София",
+                through: nil,
+                to: "Варна",
+                operation: .leftStationOrTerminated,
+                arrival: .init(
+                    scheduled: "14:19",
+                    delay: nil
+                ),
+                departure: nil
+            ),
+            TrainViewModel(
+                id: "БВ 26138",
+                from: "София",
+                through: nil,
+                to: "Варна",
+                operation: .leftStationOrTerminated,
+                arrival: nil,
+                departure: .init(
+                    scheduled: "14:19",
+                    delay: nil
+                )
+            ),
+            TrainViewModel(
                 id: "БВ 2612",
                 from: "София",
                 through: nil,
                 to: "Варна",
-                arrival: .punctual("14:20"),
+                operation: .operating,
+                arrival: .init(
+                    scheduled: "14:20",
+                    delay: nil
+                ),
                 departure: nil
             ),
             TrainViewModel(
@@ -102,15 +145,23 @@ struct TrainView_Previews: PreviewProvider {
                 from: "София",
                 through: nil,
                 to: "Варна",
+                operation: .inStation,
                 arrival: nil,
-                departure: .scheduled("14:21")
+                departure: .init(
+                    scheduled: "14:20",
+                    delay: nil
+                )
             ),
             TrainViewModel(
                 id: "КПВ 2612",
                 from: "София",
                 through: nil,
                 to: "Варна",
-                arrival: .delayed(scheduled: "14:20", delay: "5", estimate: "14:25"),
+                operation: .operating,
+                arrival: .init(
+                    scheduled: "14:20",
+                    delay: .init(minutes: 5, estimate: "14:25")
+                ),
                 departure: nil
             ),
             TrainViewModel(
@@ -118,56 +169,87 @@ struct TrainView_Previews: PreviewProvider {
                 from: "София",
                 through: nil,
                 to: "Варна",
+                operation: .notYetOperating,
                 arrival: nil,
-                departure: .delayed(scheduled: "14:21", delay: "25", estimate: "14:46")
+                departure: .init(
+                    scheduled: "14:21",
+                    delay: .init(minutes: 5, estimate: "14:26")
+                )
             ),
             TrainViewModel(
                 id: "БВ 2112",
                 from: "София",
                 through: "Мездра",
                 to: "Варна",
-                arrival: .punctual("14:20"),
-                departure: .punctual("14:30")
+                operation: .operating,
+                arrival: .init(
+                    scheduled: "14:20",
+                    delay: nil
+                ),
+                departure: .init(
+                    scheduled: "14:30",
+                    delay: nil
+                )
             ),
             TrainViewModel(
                 id: "МБВ 2112",
                 from: "София",
                 through: "Горна Оряховица",
                 to: "Варна",
-                arrival: .punctual("14:20"),
-                departure: .punctual("14:30")
+                operation: .operating,
+                arrival: .init(
+                    scheduled: "14:20",
+                    delay: nil
+                ),
+                departure: .init(
+                    scheduled: "14:30",
+                    delay: nil
+                )
             ),
             TrainViewModel(
                 id: "КПВ 2112",
                 from: "София",
                 through: "Горна Оряховица",
                 to: "Варна",
-                arrival: .punctual("14:20"),
-                departure: .delayed(scheduled: "14:30", delay: "5", estimate: "14:35")
-            ),
-            TrainViewModel(
-                id: "БВ 12612",
-                from: "София",
-                through: "Горна Оряховица",
-                to: "Варна",
-                arrival: .delayed(scheduled: "14:20", delay: "5", estimate: "14:25"),
-                departure: .punctual("14:30")
-            ),
-            TrainViewModel(
-                id: "БВ 22612",
-                from: "София",
-                through: "Горна Оряховица",
-                to: "Варна",
-                arrival: .delayed(scheduled: "14:20", delay: "5", estimate: "14:25"),
-                departure: .delayed(scheduled: "14:21", delay: "25", estimate: "14:46")
+                operation: .operating,
+                arrival:.init(
+                    scheduled: "14:20",
+                    delay: nil
+                ),
+                departure: .init(
+                    scheduled: "14:21",
+                    delay: .init(minutes: 5, estimate: "14:26")
+                )
             ),
             TrainViewModel(
                 id: "БВ 32612",
                 from: "София",
                 through: "Горна Оряховица",
                 to: "Варна",
-                arrival: .delayed(scheduled: "14:20", delay: "25", estimate: "14:45"),
-                departure: .delayed(scheduled: "14:21", delay: "25", estimate: "14:46")
+                operation: .operating,
+                arrival: .init(
+                    scheduled: "14:21",
+                    delay: .init(minutes: 5, estimate: "14:26")
+                ),
+                departure: .init(
+                    scheduled: "14:41",
+                    delay: .init(minutes: 5, estimate: "14:46")
+                )
+            ),
+            TrainViewModel(
+                id: "БВ 32612",
+                from: "София",
+                through: "Горна Оряховица",
+                to: "Варна",
+                operation: .notYetOperating,
+                arrival: .init(
+                    scheduled: "14:21",
+                    delay: nil
+                ),
+                departure: .init(
+                    scheduled: "14:41",
+                    delay: nil
+                )
             ),
         ]
     }

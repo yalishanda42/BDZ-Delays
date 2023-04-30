@@ -73,14 +73,30 @@ extension StationReducer.State {
         let from: Station
         let to: Station
         
-        var arrival: TrainTime?
-        var departure: TrainTime?
+        let schedule: Schedule
+        
+        let delay: Duration?
+        
+        let movement: MovementState
     }
+}
 
-    enum TrainTime: Equatable {
-        case scheduled(Date)
-        case punctual(Date)
-        case delayed(originalSchedule: Date, delay: Duration)
+extension StationReducer.State.TrainAtStation {
+    enum Schedule: Equatable {
+        case arrivalOnly(Date)
+        case departureOnly(Date)
+        case full(arrival: Date, departure: Date)
+    }
+    
+    enum MovementState {
+        case notYetOperating
+        case inOperation
+        
+        case doorsOpen
+        
+        case leavingStation
+        
+        case stopped
     }
 }
 

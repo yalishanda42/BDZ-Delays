@@ -11,6 +11,7 @@ struct StationRepository {
     var fetchTrainsAtStation: (_ station: Station) async throws -> [StationReducer.State.TrainAtStation]
 }
 
-enum StationRepositoryError {
+enum StationRepositoryError: Error {
     case parseError
+    case invalidData
 }

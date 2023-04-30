@@ -45,9 +45,52 @@ fileprivate extension StationReducer.State.TrainAtStation {
             from: from.name,
             through: nil, // TODO
             to: to.name,
-            arrival: arrival.map { $0.asDisplayTime },
-            departure: departure.map { $0.asDisplayTime }
+            operation: movement.asOperationState,
+            arrival: arrivalDisplayTime,
+            departure: departureDisplayTime
         )
+    }
+    
+    var arrivalDisplayTime: TrainViewModel.DisplayTime? {
+        switch schedule {
+        case .arrivalOnly(let arrival),
+                .full(arrival: let arrival, departure: _):
+            return displayTimeFrom(arrival)
+        default:
+            return nil
+        }
+    }
+    
+    var departureDisplayTime: TrainViewModel.DisplayTime? {
+        switch schedule {
+        case .departureOnly(let departure),
+                .full(arrival: _, departure: let departure):
+            return displayTimeFrom(departure)
+        default:
+            return nil
+        }
+    }
+    
+    private func displayTimeFrom(_ scheduled: Date) -> TrainViewModel.DisplayTime {
+        .init(
+            scheduled: scheduled.hoursAndMinutes,
+            delay: delay.map { .init(
+                minutes: $0.minutes,
+                estimate: scheduled.addingDuration($0).hoursAndMinutes
+            ) }
+        )
+    }
+}
+
+fileprivate extension StationReducer.State.TrainAtStation.MovementState {
+    var asOperationState: TrainViewModel.OperationState {
+        switch self {
+        case .doorsOpen: return .inStation
+        case .inOperation: return .operating
+        case .leavingStation: return .leftStationOrTerminated
+        case .stopped: return .leftStationOrTerminated
+        case .notYetOperating: return .notYetOperating
+        }
     }
 }
 
@@ -68,26 +111,9 @@ fileprivate extension TrainNumber {
     }
 }
 
-fileprivate extension StationReducer.State.TrainTime {
-    var asDisplayTime: TrainViewModel.DisplayTime {
-        switch self {
-        case .scheduled(let date):
-            return .scheduled(date.hoursAndMinutes)
-        case .punctual(let date):
-            return .punctual(date.hoursAndMinutes)
-        case .delayed(let originalSchedule, let delay):
-            return .delayed(
-                scheduled: originalSchedule.hoursAndMinutes,
-                delay: "\(delay.minutes)",
-                estimate: originalSchedule.addingDuration(delay).hoursAndMinutes
-            )
-        }
-    }
-}
-
 fileprivate extension Duration {
-    var minutes: Int64 {
-        components.seconds / 60
+    var minutes: Int {
+        Int(components.seconds / 60)
     }
 }
 

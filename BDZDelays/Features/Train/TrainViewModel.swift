@@ -14,14 +14,27 @@ struct TrainViewModel: Identifiable {
     let through: String?
     let to: String
     
+    let operation: OperationState
+    
     let arrival: DisplayTime?
     let departure: DisplayTime?
 }
 
 extension TrainViewModel {
-    enum DisplayTime {
-        case scheduled(String)
-        case punctual(String)
-        case delayed(scheduled: String, delay: String, estimate: String)
+    enum OperationState {
+        case notYetOperating
+        case operating
+        case inStation
+        case leftStationOrTerminated
+    }
+    
+    struct DisplayTime {
+        let scheduled: String
+        let delay: Delay?
+    }
+    
+    struct Delay {
+        let minutes: Int
+        let estimate: String
     }
 }

@@ -14,16 +14,36 @@ extension StationRepository: TestDependencyKey {
             [
                 .init(
                     number: .init(
+                        type: .suburban,
+                        number: 2112
+                    ),
+                    from: .sofia,
+                    to: .gornaOryahovitsa,
+                    schedule: .departureOnly(Date(timeIntervalSince1970: 3600)),
+                    delay: nil,
+                    movement: .leavingStation
+                ),
+                .init(
+                    number: .init(
+                        type: .suburban,
+                        number: 2113
+                    ),
+                    from: .sofia,
+                    to: .gornaOryahovitsa,
+                    schedule: .departureOnly(Date(timeIntervalSince1970: 3600)),
+                    delay: .seconds(240),
+                    movement: .leavingStation
+                ),
+                .init(
+                    number: .init(
                         type: .fast,
                         number: 2112
                     ),
                     from: .sofia,
                     to: .gornaOryahovitsa,
-                    arrival: .delayed(
-                        originalSchedule: Date(timeIntervalSince1970: 3600),
-                        delay: .seconds(240)
-                    ),
-                    departure: nil
+                    schedule: .arrivalOnly(Date(timeIntervalSince1970: 3600)),
+                    delay: .seconds(240),
+                    movement: .inOperation
                 ),
                 .init(
                     number: .init(
@@ -32,8 +52,12 @@ extension StationRepository: TestDependencyKey {
                     ),
                     from: .gornaOryahovitsa,
                     to: .sofia,
-                    arrival: nil,
-                    departure: .punctual(Date(timeIntervalSince1970: 300))
+                    schedule: .full(
+                        arrival: Date(timeIntervalSince1970: 3600),
+                        departure: Date(timeIntervalSince1970: 3600)
+                    ),
+                    delay: nil,
+                    movement: .notYetOperating
                 ),
             ]
         }

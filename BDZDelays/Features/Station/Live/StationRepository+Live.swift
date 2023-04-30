@@ -32,8 +32,9 @@ fileprivate extension StationReducer.State.TrainAtStation {
             ),
             from: data.from.map(Station.init) ?? station,
             to: Station(data.to),
-            arrival: .init(arrivalTimeFromData: data),
-            departure: .init(departureTimeFromData: data)
+            schedule: try .init(data),
+            delay: data.delayMinutes.map { Duration.seconds($0 * 60) },
+            movement: .init(data)
         )
     }
 }
@@ -45,38 +46,43 @@ fileprivate let dateFormatter: DateFormatter = {
     return result
 }()
 
-fileprivate extension StationReducer.State.TrainTime {
-    init?(arrivalTimeFromData data: RovrHTMLScraper.TrainData) {
-        guard
-            let arrivalString = data.arrival,
-            let arrivalDate = dateFormatter.date(from: arrivalString)
-        else {
-            return nil
+fileprivate extension String {
+    func asDate() throws -> Date {
+        guard let date = dateFormatter.date(from: self) else {
+            throw StationRepositoryError.invalidData
         }
         
-        if let delayInMinutes = data.delayMinutes {
-            self = .delayed(originalSchedule: arrivalDate, delay: .seconds(delayInMinutes * 60))
-        } else if data.isOperating {
-            self = .punctual(arrivalDate)
-        } else {
-            self = .scheduled(arrivalDate)
+        return date
+    }
+}
+
+fileprivate extension StationReducer.State.TrainAtStation.Schedule {
+    init(_ data: RovrHTMLScraper.TrainData) throws {
+        switch (data.arrival, data.departure) {
+        case let (.some(arrival), .some(departure)):
+            self = .full(arrival: try arrival.asDate(), departure: try departure.asDate())
+        case let (.some(arrival), .none):
+            self = .arrivalOnly(try arrival.asDate())
+        case let (.none, .some(departure)):
+            self = .departureOnly(try departure.asDate())
+        case (.none, .none):
+            throw StationRepositoryError.invalidData
         }
     }
-    
-    init?(departureTimeFromData data: RovrHTMLScraper.TrainData) {
-        guard
-            let departureString = data.departure,
-            let departurelDate = dateFormatter.date(from: departureString)
-        else {
-            return nil
-        }
-        
-        if let delayInMinutes = data.delayMinutes {
-            self = .delayed(originalSchedule: departurelDate, delay: .seconds(delayInMinutes * 60))
-        } else if data.isOperating {
-            self = .punctual(departurelDate)
+}
+
+fileprivate extension StationReducer.State.TrainAtStation.MovementState {
+    init(_ data: RovrHTMLScraper.TrainData) {
+        if data.isOperating {
+            self = .inOperation
+        } else if data.isAboutToLeave {
+            self = .doorsOpen
+        } else if data.hasLeft {
+            self = .leavingStation
+        } else if data.hasArrived {
+            self = .stopped
         } else {
-            self = .scheduled(departurelDate)
+            self = .notYetOperating
         }
     }
 }
