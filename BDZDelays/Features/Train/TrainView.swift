@@ -33,7 +33,7 @@ struct TrainView: View {
                 .foregroundColor(.black)
             }
             
-            Color.fromOperationState(vm.operation).frame(height: 4)
+            AnyView(operationStateView).frame(height: 4)
             
             // arrival/departure timetable
             HStack(alignment: .top) {
@@ -57,7 +57,22 @@ struct TrainView: View {
             }.padding(.vertical, 6)
         }
     }
+    
+    private var operationStateView: any View {
+        switch vm.operation {
+        case .notYetOperating:
+            return Color.clear
+        case .operating:
+            return Color.green.blinking()
+        case .inStation:
+            return Color.purple.blinking()
+        case .leftStationOrTerminated:
+            return Color.gray
+        }
+    }
 }
+
+// MARK: - DisplayTimeView
 
 private struct DisplayTimeView: View {
     let time: TrainViewModel.DisplayTime?
@@ -81,9 +96,7 @@ private struct DisplayTimeView: View {
                 case .operating where time.delay == nil:
                     Text("навреме").foregroundColor(.green)
                 case .leftStationOrTerminated:
-                    Text(pastEventText).foregroundColor(
-                        .fromOperationState(.leftStationOrTerminated)
-                    )
+                    Text(pastEventText).foregroundColor(.gray)
                 default:
                     EmptyView()
                 }
@@ -94,18 +107,28 @@ private struct DisplayTimeView: View {
     }
 }
 
-fileprivate extension Color {
-    static func fromOperationState(_ state: TrainViewModel.OperationState) -> Self {
-        switch state {
-        case .notYetOperating:
-            return .teal
-        case .operating:
-            return .green
-        case .inStation:
-            return .purple
-        case .leftStationOrTerminated:
-            return .gray
-        }
+// MARK: - Blinking
+
+fileprivate struct BlinkViewModifier: ViewModifier {
+    
+    let duration: Double
+    @State private var opacity: Double = 0.0
+    
+    func body(content: Content) -> some View {
+        content
+            .opacity(opacity)
+            .animation(.easeOut(duration: duration).repeatForever(), value: opacity)
+            .onAppear {
+                withAnimation {
+                    opacity = 1.0
+                }
+            }
+    }
+}
+
+fileprivate extension View {
+    func blinking(duration: Double = 0.75) -> some View {
+        modifier(BlinkViewModifier(duration: duration))
     }
 }
 
