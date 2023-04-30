@@ -11,7 +11,7 @@ import Dependencies
 extension StationRepository: DependencyKey {
     static let liveValue = Self(
         fetchTrainsAtStation: { station in
-            let rawData = try await RovrDownloader.downloadPageData(stationId: station.id)
+            let rawData = try await RovrDownloader.downloadPageData(stationId: station.apiID)
             let htmlString = try RovrHTMLScraper.decode(pageData: rawData)
             let scrapedTrains = try RovrHTMLScraper.parseHTML(htmlString)
             return try scrapedTrains.map {
@@ -122,7 +122,7 @@ fileprivate extension BGStation {
     
     // MARK: - IDs
     
-    var id: Int {
+    var apiID: Int {
         switch self {
         case .sofia: return 18
         case .gornaOryahovitsa: return 238
