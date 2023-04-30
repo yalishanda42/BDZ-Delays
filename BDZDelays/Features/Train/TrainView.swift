@@ -135,6 +135,28 @@ fileprivate extension View {
 // MARK: - Previews
 
 struct TrainView_Previews: PreviewProvider {
+    static var previews: some View {
+        List {
+            ForEach(testVMs) { vm in
+                Section {
+                    TrainView(vm: vm)
+                        .listRowInsets(.init())
+                }
+            }
+        }.preferredColorScheme(.light)
+        .previewDisplayName("Light mode list")
+        
+        List {
+            ForEach(testVMs) { vm in
+                Section {
+                    TrainView(vm: vm)
+                        .listRowInsets(.init())
+                }
+            }
+        }.preferredColorScheme(.dark)
+        .previewDisplayName("Dark mode list")
+    }
+    
     static var testVMs: [TrainViewModel] {
         [
             TrainViewModel(
@@ -285,27 +307,5 @@ struct TrainView_Previews: PreviewProvider {
                 )
             ),
         ]
-    }
-    
-    static var previews: some View {
-        List {
-            ForEach(testVMs) { vm in
-                Section {
-                    TrainView(vm: vm)
-                        .listRowInsets(.init())
-                }
-            }
-        }.preferredColorScheme(.light)
-        .previewDisplayName("Light mode list")
-        
-        List {
-            ForEach(testVMs) { vm in
-                Section {
-                    TrainView(vm: vm)
-                        .listRowInsets(.init())
-                }
-            }
-        }.preferredColorScheme(.dark)
-        .previewDisplayName("Dark mode list")
     }
 }
