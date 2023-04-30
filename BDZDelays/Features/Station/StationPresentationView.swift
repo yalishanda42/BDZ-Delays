@@ -147,7 +147,71 @@ struct StationPresentationView_Previews: PreviewProvider {
             reducer: StationReducer(),
             prepareDependencies: {
                 $0.context = .preview
+                $0.stationRepository.fetchTrainsAtStation = { _ in
+                    testModels
+                }
             }
-        ))
+        )).previewDisplayName("Full list")
+        
+        StationPresentationView(store: .init(
+            initialState: .init(
+                station: .gornaOryahovitsa
+            ),
+            reducer: StationReducer(),
+            prepareDependencies: {
+                $0.context = .preview
+            }
+        )).previewDisplayName("Empty list")
     }
+    
+    private static var testModels: [StationReducer.State.TrainAtStation] =
+        [
+            .init(
+                number: TrainNumber(
+                    type: .suburban,
+                    number: 2112
+                ),
+                from: .sofia,
+                to: .gornaOryahovitsa,
+                schedule: .departureOnly(Date(timeIntervalSince1970: 3600)),
+                delay: nil,
+                movement: .leavingStation
+            ),
+            .init(
+                number: TrainNumber(
+                    type: .suburban,
+                    number: 2113
+                ),
+                from: .sofia,
+                to: .gornaOryahovitsa,
+                schedule: .departureOnly(Date(timeIntervalSince1970: 3600)),
+                delay: .seconds(240),
+                movement: .leavingStation
+            ),
+            .init(
+                number: TrainNumber(
+                    type: .fast,
+                    number: 2112
+                ),
+                from: .sofia,
+                to: .gornaOryahovitsa,
+                schedule: .arrivalOnly(Date(timeIntervalSince1970: 3600)),
+                delay: .seconds(240),
+                movement: .inOperation
+            ),
+            .init(
+                number: TrainNumber(
+                    type: .normal,
+                    number: 2112
+                ),
+                from: .gornaOryahovitsa,
+                to: .sofia,
+                schedule: .full(
+                    arrival: Date(timeIntervalSince1970: 3600),
+                    departure: Date(timeIntervalSince1970: 3660)
+                ),
+                delay: nil,
+                movement: .notYetOperating
+            ),
+        ]
 }
