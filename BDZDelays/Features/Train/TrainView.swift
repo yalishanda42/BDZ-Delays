@@ -14,7 +14,7 @@ struct TrainView: View {
         VStack(spacing: 0) {
             // train info header
             ZStack {
-                Color.teal.opacity(0.69)
+                headerColor.opacity(0.69)
                 
                 VStack(spacing: 0) {
                     Text(vm.id).bold()
@@ -58,6 +58,15 @@ struct TrainView: View {
         }
     }
     
+    private var headerColor: Color {
+        switch vm.operation {
+        case .leftStationOrTerminated:
+            return .gray
+        default:
+            return .teal
+        }
+    }
+    
     private var operationStateView: any View {
         switch vm.operation {
         case .notYetOperating:
@@ -67,7 +76,7 @@ struct TrainView: View {
         case .inStation:
             return Color.purple.blinking()
         case .leftStationOrTerminated:
-            return Color.gray
+            return Color.clear
         }
     }
 }
