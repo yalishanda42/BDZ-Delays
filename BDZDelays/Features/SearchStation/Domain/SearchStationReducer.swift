@@ -52,8 +52,13 @@ struct SearchStationReducer: ReducerProtocol {
                     return .none
                 }
                 
+                guard new != state.selectedStation?.station else {
+                    // the station is already selected
+                    return .none
+                }
+                
                 state.selectedStation = .init(station: new)
-                return .none
+                return .send(.stationAction(.refresh))
                 
             case .stationAction:
                 // Child screen
