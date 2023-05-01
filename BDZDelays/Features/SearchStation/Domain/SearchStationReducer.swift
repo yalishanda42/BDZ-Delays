@@ -49,7 +49,7 @@ struct SearchStationReducer: ReducerProtocol {
             case .selectStation(let station):
                 guard let new = station else {
                     state.selectedStation = nil
-                    return .none
+                    return .send(.stationAction(.cancelRefresh))
                 }
                 
                 guard new != state.selectedStation?.station else {

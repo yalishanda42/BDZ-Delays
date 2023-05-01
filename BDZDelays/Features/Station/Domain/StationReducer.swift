@@ -21,6 +21,7 @@ struct StationReducer: ReducerProtocol {
         case refresh
         case receive(TaskResult<[State.TrainAtStation]>)
         case enableRefresh
+        case cancelRefresh
     }
     
     @Dependency(\.continuousClock) var clock
@@ -31,11 +32,16 @@ struct StationReducer: ReducerProtocol {
         switch action {
         case .refresh:
             state.loadingState = .loading
-            return .task { [station = state.station] in
-                await .receive(TaskResult {
-                    try await stationRepository.fetchTrainsAtStation(station)
-                })
-            }
+            return .concatenate(
+                // First cancel ongoing fetch
+                .cancel(id: TrainsTaskCancelID.self),
+                // Then send another
+                .task { [station = state.station] in
+                    await .receive(TaskResult {
+                        try await stationRepository.fetchTrainsAtStation(station)
+                    })
+                }.cancellable(id: TrainsTaskCancelID.self)
+            )
             
         case .receive(.success(let trains)):
             state.lastUpdateTime = now
@@ -53,10 +59,15 @@ struct StationReducer: ReducerProtocol {
         
         case .enableRefresh:
             state.loadingState = .enabled
+            
+        case .cancelRefresh:
+            return .cancel(id: TrainsTaskCancelID.self)
         }
         
         return .none
     }
+    
+    private enum TrainsTaskCancelID {}
 }
 
 extension StationReducer.State {
