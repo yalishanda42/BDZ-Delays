@@ -48,8 +48,7 @@ struct SearchStationReducer: ReducerProtocol {
                 
             case .selectStation(let station):
                 guard let new = station else {
-                    state.selectedStation = nil
-                    return .send(.stationAction(.cancelRefresh))
+                    return .send(.stationAction(.finalize))
                 }
                 
                 guard new != state.selectedStation?.station else {
@@ -60,8 +59,12 @@ struct SearchStationReducer: ReducerProtocol {
                 state.selectedStation = .init(station: new)
                 return .send(.stationAction(.refresh))
                 
-            case .stationAction:
+            case .stationAction(let childAction):
                 // Child screen
+                if case .finalize = childAction {
+                    state.selectedStation = nil
+                }
+                
                 return .none
             }
         }.ifLet(\.selectedStation, action: /Action.stationAction) {

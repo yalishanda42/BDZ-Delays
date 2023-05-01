@@ -21,7 +21,9 @@ struct StationReducer: ReducerProtocol {
         case refresh
         case receive(TaskResult<[State.TrainAtStation]>)
         case enableRefresh
-        case cancelRefresh
+        
+        /// To be invoked before destroying
+        case finalize
     }
     
     @Dependency(\.continuousClock) var clock
@@ -60,7 +62,7 @@ struct StationReducer: ReducerProtocol {
         case .enableRefresh:
             state.loadingState = .enabled
             
-        case .cancelRefresh:
+        case .finalize:
             return .cancel(id: TrainsTaskCancelID.self)
         }
         
