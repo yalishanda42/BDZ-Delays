@@ -8,17 +8,68 @@
 import Foundation
 import Dependencies
 
+fileprivate typealias Train = StationReducer.State.TrainAtStation
+
 extension StationRepository: DependencyKey {
-    static let liveValue = Self(
-        fetchTrainsAtStation: { station in
-            let rawData = try await RovrDownloader.downloadPageData(stationId: station.apiID)
-            let htmlString = try RovrHTMLScraper.decode(pageData: rawData)
-            let scrapedTrains = try RovrHTMLScraper.parseHTML(htmlString)
-            return try scrapedTrains.map {
-                try StationReducer.State.TrainAtStation($0, station: station)
+    static let liveValue: Self = {
+        
+        @Dependency(\.date.now) var now
+        @Dependency(\.calendar) var calendar
+        // TODO: make the scraper a dependency too
+        
+        let cache = CacheActor()
+        
+        return Self(
+            fetchTrainsAtStation: { station -> [Train] in
+                let stationId = station.apiID
+                
+                let cacheEntry = await cache.retrieve(for: stationId)
+                let isInTheSameMinute = cacheEntry
+                    .map {
+                        let components: Set<Calendar.Component> = [.day, .hour, .minute]
+                        let entryComponents = calendar.dateComponents(components, from: $0.date)
+                        let nowComponents = calendar.dateComponents(components, from: now)
+                        return entryComponents == nowComponents
+                    }
+                
+                if let entry = cacheEntry, isInTheSameMinute == true {
+                    // ROVR updates the available data every whole minute
+                    // so there is no point in refetching for the same minute.
+                    return entry.trains
+                }
+                
+                let rawData = try await RovrDownloader.downloadPageData(stationId: stationId)
+                let htmlString = try RovrHTMLScraper.decode(pageData: rawData)
+                let scrapedTrains = try RovrHTMLScraper.parseHTML(htmlString)
+                let result = try scrapedTrains.map { try Train($0, station: station) }
+                
+                await cache.updateValue(.init(date: now, trains: result), forKey: stationId)
+                
+                return result
             }
-        }
-    )
+        )
+    }()
+}
+
+// MARK: - Cache
+
+fileprivate actor CacheActor {
+    private var cache: [Int: Entry] = [:]
+    
+    func retrieve(for key: Int) -> Entry? {
+        return cache[key]
+    }
+    
+    func updateValue(_ value: Entry?, forKey key: Int) {
+        cache[key] = value
+    }
+}
+
+extension CacheActor {
+    struct Entry {
+        let date: Date
+        let trains: [Train]
+    }
 }
 
 // MARK: - Convertions
