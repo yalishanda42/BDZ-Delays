@@ -67,6 +67,10 @@ struct StationView: View {
                         TrainView(vm: train.asViewModel)
                             .listRowInsets(.init())
                     }
+                }.refreshable {
+                    await vs.send(.refresh) {
+                        $0.loadingState == .loading
+                    }
                 }
         }
     }
