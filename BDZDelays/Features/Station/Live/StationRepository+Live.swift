@@ -223,7 +223,7 @@ fileprivate extension BGStation {
         case "Гор прием.парк": self = .gorPriemPark
         case "Горна баня": self = .gornaBanya
         case "Горна баня сп": self = .gornaBanyaSp
-        case "Горна оряховица": self = .gornaOryahovitsa
+        case "Горна оряховица": self = .gornaOryahovitsa
         case "Горни дъбник": self = .gorniDabnik
         case "Граф игнатиево": self = .grafIgnatievo
         case "Гурково": self = .gurkovo
