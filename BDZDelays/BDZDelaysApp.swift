@@ -11,9 +11,9 @@ import SwiftUI
 struct BDZDelaysApp: App {
     var body: some Scene {
         WindowGroup {
-            StationPresentationView(store: .init(
-                initialState: .init(station: .sofia),
-                reducer: StationReducer()
+            SearchStationView(store: .init(
+                initialState: .init(),
+                reducer: SearchStationReducer()
             ))
         }
     }
