@@ -1,5 +1,5 @@
 //
-//  StationPresentationView.swift
+//  StationView.swift
 //  BDZDelays
 //
 //  Created by Alexander Ignatov on 22.04.23.
@@ -10,14 +10,63 @@ import ComposableArchitecture
 
 // MARK: - View
 
-struct StationPresentationView: View {
+struct StationView: View {
     let store: StoreOf<StationReducer>
     
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            StationView(vm: viewStore.asViewModel)
+        WithViewStore(store, observe: { $0 }) { vs in
+            AnyView(content(vs))
+                .navigationTitle(vs.station.name)
+                .toolbar {
+                    if let time = vs.lastUpdateTime {
+                        Text(time.hoursAndMinutes)
+                    }
+                    
+                    switch vs.loadingState {
+                    case .loading where !vs.trains.isEmpty:
+                        ProgressView()
+                    case .failed:
+                        Button {
+                            vs.send(.refresh)
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(.red)
+                        }
+                    case .enabled:
+                        Button {
+                            vs.send(.refresh)
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                    default:
+                        EmptyView()
+                    }
+                }
                 .onAppear {
-                    viewStore.send(.refresh)
+                    vs.send(.refresh)
+                }
+        }
+    }
+    
+    private func content(_ vs: ViewStoreOf<StationReducer>) -> any View {
+        switch vs.loadingState {
+        case .loading where vs.trains.isEmpty:
+            return ProgressView()
+        case .failed where vs.trains.isEmpty:
+            return VStack {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundColor(.red)
+                Text("Неуспешен опит за взимане на данните. Дали имате интернет?")
+            }
+        case .enabled where vs.trains.isEmpty,
+             .disabled where vs.trains.isEmpty:
+            return Text("Няма пътнически влакове за следващите 6 часа.")
+        default:
+            return List(vs.trains) { train in
+                    Section {
+                        TrainView(vm: train.asViewModel)
+                            .listRowInsets(.init())
+                    }
                 }
         }
     }
@@ -25,25 +74,12 @@ struct StationPresentationView: View {
 
 // MARK: - Convertions
 
-fileprivate extension ViewStore where ViewState == StationReducer.State, ViewAction == StationReducer.Action {
-    var asViewModel: StationViewModel {
-        .init(
-            name: state.station.name,
-            trains: state.trains.map { $0.asViewModel },
-            refreshState: state.loadingState.asRefreshIndicatorState,
-            updateDisplayTime: state.lastUpdateTime
-                .map { $0.hoursAndMinutes },
-            refreshAction: { self.send(.refresh) }
-        )
-    }
-}
-
 fileprivate extension StationReducer.State.TrainAtStation {
     var asViewModel: TrainViewModel {
         .init(
             id: number.asString,
             from: from.name,
-            through: nil, // TODO
+            through: nil,
             to: to.name,
             operation: movement.asOperationState,
             arrival: arrivalDisplayTime,
@@ -94,17 +130,6 @@ fileprivate extension StationReducer.State.TrainAtStation.MovementState {
     }
 }
 
-fileprivate extension StationReducer.State.RefreshState {
-    var asRefreshIndicatorState: StationViewModel.RefreshIndicatorState {
-        switch self {
-        case .disabled: return .hidden
-        case .enabled: return .refresh
-        case .failed: return .warning
-        case .loading: return .loading
-        }
-    }
-}
-
 fileprivate extension TrainNumber {
     var asString: String {
         "\(type.abbrev) \(number)"
@@ -138,30 +163,34 @@ fileprivate extension Date {
 
 // MARK: - Previews
 
-struct StationPresentationView_Previews: PreviewProvider {
+struct StationView_Previews: PreviewProvider {
     static var previews: some View {
-        StationPresentationView(store: .init(
-            initialState: .init(
-                station: .gornaOryahovitsa
-            ),
-            reducer: StationReducer(),
-            prepareDependencies: {
-                $0.context = .preview
-                $0.stationRepository.fetchTrainsAtStation = { _ in
-                    testModels
+        NavigationView {
+            StationView(store: .init(
+                initialState: .init(
+                    station: .gornaOryahovitsa
+                ),
+                reducer: StationReducer(),
+                prepareDependencies: {
+                    $0.context = .preview
+                    $0.stationRepository.fetchTrainsAtStation = { _ in
+                        testModels
+                    }
                 }
-            }
-        )).previewDisplayName("Full list")
+            ))
+        }.previewDisplayName("Full list")
         
-        StationPresentationView(store: .init(
-            initialState: .init(
-                station: .gornaOryahovitsa
-            ),
-            reducer: StationReducer(),
-            prepareDependencies: {
-                $0.context = .preview
-            }
-        )).previewDisplayName("Empty list")
+        NavigationView {
+            StationView(store: .init(
+                initialState: .init(
+                    station: .gornaOryahovitsa
+                ),
+                reducer: StationReducer(),
+                prepareDependencies: {
+                    $0.context = .preview
+                }
+            ))
+        }.previewDisplayName("Empty list")
     }
     
     private static var testModels: [StationReducer.State.TrainAtStation] =

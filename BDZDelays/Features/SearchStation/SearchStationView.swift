@@ -24,7 +24,7 @@ struct SearchStationView: View {
                 }.navigationTitle("ЖП Гари")
             } detail: {
                 if let selected = vs.selectedStation {
-                    StationPresentationView(store: store.scope(
+                    StationView(store: store.scope(
                         state: { _ in selected },
                         action: SearchStationReducer.Action.stationAction
                     ))

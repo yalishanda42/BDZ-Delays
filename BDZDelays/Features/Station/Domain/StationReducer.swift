@@ -52,12 +52,6 @@ struct StationReducer: ReducerProtocol {
         
         case .receive(.failure):
             state.loadingState = .failed
-            return .run { send in
-                for await _ in clock.timer(interval: .seconds(5)) {
-                    await send(.enableRefresh)
-                    break
-                }
-            }
         
         case .enableRefresh:
             state.loadingState = .enabled
