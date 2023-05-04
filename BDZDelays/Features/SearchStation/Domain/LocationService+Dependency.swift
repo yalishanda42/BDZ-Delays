@@ -11,18 +11,16 @@ import Combine
 
 extension LocationService: TestDependencyKey {
     static let previewValue: Self = {
-        let subject = PassthroughSubject<SearchStationReducer.State.LocationStatus, Never>()
+        var continuation: AsyncStream<SearchStationReducer.State.LocationStatus>.Continuation?
         return Self(
             statusStream: {
                 AsyncStream { cont in
-                    let cancellable = subject.sink {
-                        cont.yield($0)
-                    }
-                    subject.send(.notYetAskedForAuthorization)
+                    cont.yield(.notYetAskedForAuthorization)
+                    continuation = cont
                 }
             },
             requestAuthorization: {
-                subject.send(.authorized(nearestStation: .dobrich))
+                continuation?.yield(.authorized(nearestStation: .dobrich))
             }
         )
     }()
