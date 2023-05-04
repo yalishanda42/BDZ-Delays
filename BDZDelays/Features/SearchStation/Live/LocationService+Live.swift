@@ -29,7 +29,7 @@ extension LocationService: DependencyKey {
                         return .unableToUseLocation
                     case .authorizedAlways, .authorizedWhenInUse:
                         guard let location = locationMaybe else {
-                            return .authorized(nearestStation: nil)
+                            return .determining
                         }
                         
                         //                        let stationId = await RovrProximityService.nearestStation(
