@@ -15,6 +15,7 @@ struct SearchStationReducer: ReducerProtocol {
     struct State: Equatable {
         var filteredStations = BGStation.allCases
         var query: String = ""
+        var locationStatus: LocationStatus = .notYetAskedForAuthorization
         
         // Child screen
         var selectedStation: StationReducer.State?
@@ -24,9 +25,14 @@ struct SearchStationReducer: ReducerProtocol {
         case updateQuery(String)
         case selectStation(BGStation?)
         
+        case askForLocationPersmission
+        case locationSettings
+        
         // Child screen
         case stationAction(StationReducer.Action)
     }
+    
+    @Dependency(\.locationService) var locationService
     
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
@@ -59,6 +65,15 @@ struct SearchStationReducer: ReducerProtocol {
                 state.selectedStation = .init(station: new)
                 return .send(.stationAction(.refresh))
                 
+            case .askForLocationPersmission:
+                return .fireAndForget {
+                    await locationService.requestAuthorization()
+                }
+                
+            case .locationSettings:
+                // TODO
+                return .none
+                
             case .stationAction(let childAction):
                 // Child screen
                 if case .finalize = childAction {
@@ -70,5 +85,15 @@ struct SearchStationReducer: ReducerProtocol {
         }.ifLet(\.selectedStation, action: /Action.stationAction) {
             StationReducer()
         }
+    }
+}
+
+extension SearchStationReducer.State {
+    enum LocationStatus: Equatable {
+        case notYetAskedForAuthorization
+        case determining
+        case authorized(nearestStation: BGStation?)
+        case denied
+        case unableToUseLocation
     }
 }
