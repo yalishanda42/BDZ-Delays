@@ -31,6 +31,9 @@ struct SearchStationView: View {
                 ),
                 prompt: "Изберете гара..."
             )
+            .task {
+                await vs.send(.task).finish()
+            }
         }
     }
 }

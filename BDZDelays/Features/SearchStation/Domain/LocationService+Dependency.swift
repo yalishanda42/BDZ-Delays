@@ -13,11 +13,13 @@ extension LocationService: TestDependencyKey {
     static let previewValue: Self = {
         let subject = PassthroughSubject<SearchStationReducer.State.LocationStatus, Never>()
         return Self(
-            status: AsyncStream { cont in
-                let cancellable = subject.sink {
-                    cont.yield($0)
+            statusStream: {
+                AsyncStream { cont in
+                    let cancellable = subject.sink {
+                        cont.yield($0)
+                    }
+                    subject.send(.notYetAskedForAuthorization)
                 }
-                subject.send(.notYetAskedForAuthorization)
             },
             requestAuthorization: {
                 subject.send(.authorized(nearestStation: .dobrich))

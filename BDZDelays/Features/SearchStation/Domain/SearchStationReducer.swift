@@ -25,10 +25,17 @@ struct SearchStationReducer: ReducerProtocol {
         case updateQuery(String)
         case selectStation(BGStation?)
         
+        case locationStatusUpdate(State.LocationStatus)
         case askForLocationPersmission
         case locationSettings
         
-        // Child screen
+        /// To be send from the `.task` view modifier.
+        /// Used for executing a long-running effect for
+        /// as long as the view is alive.
+        /// Automatically cancelled when the view disappears.
+        case task
+        
+        /// Child screen action
         case stationAction(StationReducer.Action)
     }
     
@@ -37,6 +44,18 @@ struct SearchStationReducer: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
+            case .task:
+                return .run { send in
+                    let stream = await locationService.statusStream()
+                    for await status in stream {
+                        await send(.locationStatusUpdate(status))
+                    }
+                }
+                
+            case .locationStatusUpdate(let status):
+                state.locationStatus = status
+                return .none
+                
             case .updateQuery(let newQuery):
                 let trimmed = newQuery.trimmingCharacters(in: .whitespaces)
                 state.query = trimmed
@@ -66,6 +85,7 @@ struct SearchStationReducer: ReducerProtocol {
                 return .send(.stationAction(.refresh))
                 
             case .askForLocationPersmission:
+                state.locationStatus = .determining
                 return .fireAndForget {
                     await locationService.requestAuthorization()
                 }

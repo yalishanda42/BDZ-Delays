@@ -8,6 +8,6 @@
 import Foundation
 
 struct LocationService {
-    var status: AsyncStream<SearchStationReducer.State.LocationStatus>
+    var statusStream: () async -> AsyncStream<SearchStationReducer.State.LocationStatus>
     var requestAuthorization: () async -> Void
 }

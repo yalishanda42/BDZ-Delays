@@ -8,7 +8,6 @@
 import Foundation
 import Dependencies
 import CoreLocation
-import Combine
 
 private let coordTolerance = 0.001
 private let authorizedStatuses: [CLAuthorizationStatus] = [.authorizedAlways, .authorizedWhenInUse]
@@ -16,9 +15,11 @@ private let authorizedStatuses: [CLAuthorizationStatus] = [.authorizedAlways, .a
 extension LocationService: DependencyKey {
     static let liveValue: Self = {
         return Self(
-            status: AsyncStream {
-                let statusStream = locationActor.status
-                for await (authStatus, locationMaybe) in statusStream {
+            statusStream: {
+                let stream = await LocationManagerActor.shared.status
+                return stream.map {
+                    (authStatus, locationMaybe) -> SearchStationReducer.State.LocationStatus in
+                    
                     switch authStatus {
                     case .notDetermined:
                         return .notYetAskedForAuthorization
@@ -31,68 +32,67 @@ extension LocationService: DependencyKey {
                             return .authorized(nearestStation: nil)
                         }
                         
-//                        let stationId = await RovrProximityService.nearestStation(
-//                            la: location.latitude, lo: location.longitude
-//                        )
-//                        return .authorized(nearestStation: BGStation(id: stationId))
+                        //                        let stationId = await RovrProximityService.nearestStation(
+                        //                            la: location.latitude, lo: location.longitude
+                        //                        )
+                        //                        return .authorized(nearestStation: BGStation(id: stationId))
                         return .authorized(nearestStation: .sofia)
                         
                     @unknown default:
                         return .unableToUseLocation
                     }
-                }
-                
-                return .unableToUseLocation
-            } onCancel: {},
+                }.eraseToStream()
+            },
             requestAuthorization: {
-                await locationActor.requestAuth()
+                await LocationManagerActor.shared.requestAuth()
             }
         )
     }()
-    
-    private static let locationActor = LocationManagerActor()
 }
 
-private actor LocationManagerActor: NSObject {
+// "Configuration of your location manager object must always occur on a thread
+// with an active run loop, such as your application’s main thread."
+@MainActor
+private struct LocationManagerActor {
     
-    let status: AsyncPublisher<AnyPublisher<(CLAuthorizationStatus, CLLocationCoordinate2D?), Never>>
+    private(set) static var shared = Self()  // bug: https://stackoverflow.com/a/69264293
     
-    private let manager = CLLocationManager()
+    let status: AsyncStream<(CLAuthorizationStatus, CLLocationCoordinate2D?)>
+    
+    private let manager: CLLocationManager
     private let delegate: ManagerDelegate
     
-    private var cancellables: Set<AnyCancellable> = []
-    
-    override init() {
-        self.delegate = ManagerDelegate(status: manager.authorizationStatus)
+    private init() {
+        let manager = CLLocationManager()
         
-        self.status = AsyncPublisher(
-            delegate.$status.removeDuplicates().combineLatest(
-                delegate.$location.removeDuplicates {
-                    guard let c1 = $0, let c2 = $1 else {
-                        return $0 == nil && $1 == nil
-                    }
-                    
-                    return abs(c1.latitude - c2.latitude) <= coordTolerance
-                        && abs(c1.longitude - c2.longitude) <= coordTolerance
-                }
-            ).eraseToAnyPublisher()
-        )
+        let status = manager.authorizationStatus
+        let delegate = ManagerDelegate(status: status)
         
-        super.init()
-        
-        delegate.$status.sink { [weak manager] status in
-            switch status {
-            case .authorizedAlways, .authorizedWhenInUse:
-                // From the official documentation:
-                // "The Visits location service provides the most power-efficient way to get location data.
-                // The system monitors the places someone visits and the time they spend there,
-                // and delivers that data at a later time."
-                // Calling this more than once should be okay as well.
-                manager?.startMonitoringVisits()
-            default:
-                break
+        self.status = AsyncStream { cont in
+            cont.yield((status, nil))
+            if authorizedStatuses.contains(status) {
+                manager.startMonitoringVisits()
             }
-        }.store(in: &cancellables)
+            
+            delegate.onStatusUpdate = { [weak delegate] in
+                guard let delegate = delegate else { return }
+                cont.yield(($0, delegate.location))
+                
+                if authorizedStatuses.contains($0) {
+                    // it is okay to duplicate these calls
+                    manager.startMonitoringVisits()
+                }
+            }
+            
+            delegate.onLocationUpdate = { [weak delegate] in
+                guard let delegate = delegate else { return }
+                cont.yield((delegate.status, $0))
+            }
+            
+        }
+        
+        self.manager = manager
+        self.delegate = delegate
         
         manager.delegate = delegate
     }
@@ -106,12 +106,33 @@ private actor LocationManagerActor: NSObject {
 extension LocationManagerActor {
     class ManagerDelegate: NSObject, CLLocationManagerDelegate {
         
-        @Published var status: CLAuthorizationStatus
-        @Published var location: CLLocationCoordinate2D?
+        private(set) var status: CLAuthorizationStatus {
+            didSet {
+                guard oldValue != status else { return }
+                onStatusUpdate?(status)
+            }
+        }
         
-        init(status: CLAuthorizationStatus, location: CLLocationCoordinate2D? = nil) {
+        private(set) var location: CLLocationCoordinate2D? {
+            didSet {
+                guard !oldValue.isApproximatelyEqualTo(location) else { return }
+                onLocationUpdate?(location)
+            }
+        }
+        
+        var onStatusUpdate: ((CLAuthorizationStatus) -> Void)?
+        var onLocationUpdate: ((CLLocationCoordinate2D?) -> Void)?
+        
+        init(
+            status: CLAuthorizationStatus,
+            location: CLLocationCoordinate2D? = nil,
+            onStatusUpdate: ((CLAuthorizationStatus) -> Void)? = nil,
+            onLocationUpdate: ((CLLocationCoordinate2D?) -> Void)? = nil
+        ) {
             self.status = status
             self.location = location
+            self.onStatusUpdate = onStatusUpdate
+            self.onLocationUpdate = onLocationUpdate
         }
             
         func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
@@ -121,5 +142,16 @@ extension LocationManagerActor {
         func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
             status = manager.authorizationStatus
         }
+    }
+}
+
+fileprivate extension Optional where Wrapped == CLLocationCoordinate2D {
+    func isApproximatelyEqualTo(_ other: CLLocationCoordinate2D?) -> Bool {
+        guard let c1 = self, let c2 = other else {
+            return self == nil && other == nil
+        }
+        
+        return abs(c1.latitude - c2.latitude) <= coordTolerance
+        && abs(c1.longitude - c2.longitude) <= coordTolerance
     }
 }
