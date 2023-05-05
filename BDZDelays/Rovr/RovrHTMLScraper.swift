@@ -41,7 +41,7 @@ enum RovrHTMLScraper {
         return String(decoding: pageData, as: WindowsCP1251.self)
     }
     
-    static func parseHTML(_ htmlString: String) throws -> [TrainData] {
+    static func scrapeHTML(_ htmlString: String) throws -> [TrainData] {
         let document = try SwiftSoup.parse(htmlString)
         
         guard

@@ -40,7 +40,7 @@ extension StationRepository: DependencyKey {
                 
                 let rawData = try await RovrDownloader.downloadPageData(stationId: stationId)
                 let htmlString = try RovrHTMLScraper.decode(pageData: rawData)
-                let scrapedTrains = try RovrHTMLScraper.parseHTML(htmlString)
+                let scrapedTrains = try RovrHTMLScraper.scrapeHTML(htmlString)
                 let result = try scrapedTrains.map { try Train($0, station: station) }
                 
                 await cache.updateValue(.init(date: now, trains: result), forKey: stationId)
