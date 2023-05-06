@@ -32,15 +32,6 @@ enum RovrHTMLScraper {
         let hasLeft: Bool
     }
     
-    static func decode(pageData: Data) throws -> String {
-        // Unfortunately, `String(data: pageData, encoding: .windowsCP1251)`
-        // returns `nil` for some reason, although the data appears to be in the
-        // Windows 1251 encoding.
-        // This required to write a custom encoding implementation
-        // so that at least we can have the cyrillic letters decoded correctly.
-        return String(decoding: pageData, as: WindowsCP1251.self)
-    }
-    
     static func scrapeHTML(_ htmlString: String) throws -> [TrainData] {
         let document = try SwiftSoup.parse(htmlString)
         
