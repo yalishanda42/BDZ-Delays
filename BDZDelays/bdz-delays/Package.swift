@@ -10,58 +10,27 @@ let package = Package(
     // MARK: - Products
     
     products: [
-        
         // Shared Models
         
-        .library(
-            name: "SharedModels",
-            targets: ["SharedModels"]
-        ),
+        .library(name: "SharedModels", targets: ["SharedModels"]),
         
         // Train Reusable View
         
-        .library(
-            name: "TrainView",
-            targets: ["TrainView"]
-        ),
+        .library(name: "TrainView", targets: ["TrainView"]),
         
         // Station Feature
         
-        .library(
-            name: "StationView",
-            targets: ["StationView"]
-        ),
-        .library(
-            name: "StationDomain",
-            targets: ["StationDomain"]
-        ),
-        .library(
-            name: "StationRepository",
-            targets: ["StationRepository"]
-        ),
-        .library(
-            name: "StationRepositoryLive",
-            targets: ["StationRepositoryLive"]
-        ),
+        .library(name: "StationView", targets: ["StationView"]),
+        .library(name: "StationDomain", targets: ["StationDomain"]),
+        .library(name: "StationRepository", targets: ["StationRepository"]),
+        .library(name: "StationRepositoryLive", targets: ["StationRepositoryLive"]),
         
         // Search Station Feature
         
-        .library(
-            name: "SearchStationView",
-            targets: ["SearchStationView"]
-        ),
-        .library(
-            name: "SearchStationDomain",
-            targets: ["SearchStationDomain"]
-        ),
-        .library(
-            name: "LocationService",
-            targets: ["LocationService"]
-        ),
-        .library(
-            name: "LocationServiceLive",
-            targets: ["LocationServiceLive"]
-        ),
+        .library(name: "SearchStationView", targets: ["SearchStationView"]),
+        .library(name: "SearchStationDomain", targets: ["SearchStationDomain"]),
+        .library(name: "LocationService", targets: ["LocationService"]),
+        .library(name: "LocationServiceLive", targets: ["LocationServiceLive"]),
         
         // ROVR scraping tools
         
