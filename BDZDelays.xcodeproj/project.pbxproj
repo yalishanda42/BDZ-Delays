@@ -22,7 +22,7 @@
 		A067208229F31B97008A4D15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A067208429F31B97008A4D15 /* BDZDelays.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BDZDelays.entitlements; sourceTree = "<group>"; };
 		A067208629F31B97008A4D15 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A08CED732A08EEDB00578D75 /* bdz-delays */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "bdz-delays"; path = "../../bdz-delays"; sourceTree = "<group>"; };
+		A08CED732A08EEDB00578D75 /* bdz-delays */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "bdz-delays"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
