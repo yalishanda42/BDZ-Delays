@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "bdz-delays",
     
-    platforms: [.iOS(.v16), .macOS(.v12)],
+    platforms: [.iOS(.v16), .macOS(.v13)],
     
     // MARK: - Products
     
