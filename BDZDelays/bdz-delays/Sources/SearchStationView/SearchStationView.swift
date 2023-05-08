@@ -105,7 +105,7 @@ private struct NearestStationView: View {
             case .determining:
                 Image(systemName: "circle.dotted")
                     .foregroundColor(.gray)
-                Text("Проверява се най-близката гара коя е...")
+                Text("Свързване...")
                     .foregroundColor(.gray)
                     .italic()
             case .authorized(nearestStation: .none):
