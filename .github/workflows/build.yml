@@ -18,10 +18,9 @@ jobs:
         
       - name: Install fastlane
         run: |
-          gem install bundler
-          bundle install
+          brew install fastlane
           
       - name: Run lane
         run: |
-          bundle exec fastlane build_app_debug
+          fastlane build_app_debug
       
