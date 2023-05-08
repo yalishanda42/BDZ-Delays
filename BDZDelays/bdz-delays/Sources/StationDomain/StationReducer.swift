@@ -15,12 +15,20 @@ public struct StationReducer: ReducerProtocol {
     
     public struct State: Equatable {
         public let station: BGStation
-        public var loadingState: RefreshState = .loading
-        public var trains: [TrainAtStation] = []
+        public var loadingState: RefreshState
+        public var trains: [TrainAtStation]
         public var lastUpdateTime: Date?
         
-        public init(station: BGStation) {
+        public init(
+            station: BGStation,
+            loadingState: RefreshState = .loading,
+            trains: [TrainAtStation] = [],
+            lastUpdateTime: Date? = nil
+        ) {
             self.station = station
+            self.loadingState = loadingState
+            self.trains = trains
+            self.lastUpdateTime = lastUpdateTime
         }
     }
     
