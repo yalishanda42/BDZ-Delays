@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+import SearchStationView
+import SearchStationDomain
+
+import StationRepositoryLive
+import LocationServiceLive
+
 @main
 struct BDZDelaysApp: App {
     var body: some Scene {
