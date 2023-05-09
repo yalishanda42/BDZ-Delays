@@ -29,4 +29,21 @@ platform :ios do
       sdk: "iphoneos16.2"
     )
   end
+
+  desc "Run all tests"
+  lane :tests do
+    for scheme in [
+      "StationDomain", 
+      "SearchStationDomain",
+      "ROVR",
+    ] do
+      run_tests(
+        package_path: "BDZDelays/bdz-delays",
+        scheme: scheme,
+        device: "iPhone 13 Pro Max",
+        result_bundle: true,
+        output_directory: Dir.pwd + "/test_output"  # https://github.com/fastlane/fastlane/issues/20012
+      )
+    end
+  end
 end

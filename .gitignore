@@ -108,3 +108,6 @@ xcuserdata
 
 # Mac OS
 .DS_Store
+
+# fastlane
+BDZDelays/bdz-delays/fastlane/*
