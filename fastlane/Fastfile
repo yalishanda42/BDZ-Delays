@@ -32,6 +32,7 @@ platform :ios do
 
   desc "Run all tests"
   lane :tests do
+    sh('rm -rf "$(pwd)/test_output"')
     for scheme in [
       "StationDomain", 
       "SearchStationDomain",
