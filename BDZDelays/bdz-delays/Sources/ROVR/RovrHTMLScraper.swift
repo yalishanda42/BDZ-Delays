@@ -15,7 +15,7 @@ public enum RovrHTMLScraper {
         case timetableParseError
     }
     
-    public struct TrainData {
+    public struct TrainData: Equatable {
         public let type: String
         public let number: String
         public let to: String

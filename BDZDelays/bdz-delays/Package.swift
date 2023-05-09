@@ -152,6 +152,9 @@ let package = Package(
             name: "ROVRTests",
             dependencies: [
                 "ROVR",
+            ],
+            resources: [
+                .process("Resources"),
             ]
         ),
         
