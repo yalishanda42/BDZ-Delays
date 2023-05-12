@@ -15,7 +15,15 @@ import SharedModels
 import Dependencies
 
 private let coordTolerance = 0.001
+
+#if os(iOS)
 private let authorizedStatuses: [CLAuthorizationStatus] = [.authorizedAlways, .authorizedWhenInUse]
+#elseif os(macOS)
+private let authorizedStatuses: [CLAuthorizationStatus] = [.authorized]
+#else
+private let authorizedStatuses: [CLAuthorizationStatus] = []
+#endif
+
 
 extension LocationService: DependencyKey {
     public static let liveValue: Self = {
