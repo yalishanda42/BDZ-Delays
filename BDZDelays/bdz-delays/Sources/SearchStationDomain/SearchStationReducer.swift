@@ -32,7 +32,7 @@ public struct SearchStationReducer: ReducerProtocol {
         public init(
             filteredStations: [BGStation] = BGStation.allCases,
             query: String = "",
-            locationStatus: LocationStatus = .notYetAskedForAuthorization,
+            locationStatus: LocationStatus = .unableToUseLocation,
             selectedStation: StationReducer.State? = nil
         ) {
             self.filteredStations = filteredStations
