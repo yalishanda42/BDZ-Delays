@@ -27,7 +27,7 @@ platform :ios do
       export_method: "development",
       skip_codesigning: true,
       skip_archive: true,
-      sdk: "iphoneos16.2"
+      sdk: "iphoneos16.4"
     )
   end
 
