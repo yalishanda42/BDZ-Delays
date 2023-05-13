@@ -68,8 +68,11 @@ final class SearchStationDomainTests: XCTestCase {
     
     func test_observesLocation() async throws {
         let statuses: [LocationStatus] = [
+            .notYetAskedForAuthorization,
             .authorized(nearestStation: .sofia),
             .denied,
+            .authorized(nearestStation: nil),
+            .authorized(nearestStation: .dobrich),
         ]
         
         let clock = TestClock()
