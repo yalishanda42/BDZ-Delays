@@ -40,12 +40,6 @@ public struct StationView: View {
                             Image(systemName: "arrow.clockwise")
                                 .foregroundColor(.red)
                         }
-                    case .enabled:
-                        Button {
-                            vs.send(.refresh)
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                        }
                     default:
                         EmptyView()
                     }
@@ -72,8 +66,7 @@ public struct StationView: View {
                     .foregroundColor(.red)
                 Text("Неуспешен опит за взимане на данните. Дали имате интернет?")
             }
-        case .enabled where vs.trains.isEmpty,
-             .disabled where vs.trains.isEmpty:
+        case .loaded where vs.trains.isEmpty:
             Text("Няма пътнически влакове за следващите 6 часа.")
         default:
             List(vs.trains) { train in

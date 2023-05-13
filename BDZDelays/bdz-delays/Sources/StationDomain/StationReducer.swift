@@ -35,7 +35,6 @@ public struct StationReducer: ReducerProtocol {
     public enum Action: Equatable {
         case refresh
         case receive(TaskResult<[TrainAtStation]>)
-        case enableRefresh
         
         /// Execute the long-running effect,
         /// associated with the lifetime of the feature.
@@ -90,13 +89,10 @@ public struct StationReducer: ReducerProtocol {
         case .receive(.success(let trains)):
             state.lastUpdateTime = now
             state.trains = trains
-            state.loadingState = .disabled
+            state.loadingState = .loaded
         
         case .receive(.failure):
             state.loadingState = .failed
-        
-        case .enableRefresh:
-            state.loadingState = .enabled
             
         case .finalize:
             return .cancel(id: TrainsTaskCancelID.self)
@@ -110,9 +106,8 @@ public struct StationReducer: ReducerProtocol {
 
 public extension StationReducer.State {
     enum RefreshState: Equatable {
-        case disabled
+        case loaded
         case loading
-        case enabled
         case failed
     }
 }

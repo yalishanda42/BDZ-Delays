@@ -22,7 +22,7 @@ final class StationDomainTests: XCTestCase {
 
         await store.send(.refresh)
         await store.receive(.receive(.success(expected))) {
-            $0.loadingState = .disabled
+            $0.loadingState = .loaded
             $0.trains = expected
             $0.lastUpdateTime = refreshDate
         }
@@ -34,7 +34,7 @@ final class StationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: .init(
                 station: .sofia,
-                loadingState: .enabled,
+                loadingState: .loaded,
                 trains: Self.expectedOne,
                 lastUpdateTime: Self.dateOne
             ),
@@ -61,7 +61,7 @@ final class StationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: .init(
                 station: .sofia,
-                loadingState: .enabled,
+                loadingState: .loaded,
                 trains: Self.expectedOne,
                 lastUpdateTime: Self.dateOne
             ),
@@ -77,7 +77,7 @@ final class StationDomainTests: XCTestCase {
             $0.loadingState = .loading
         }
         await store.receive(.receive(.success(expected))) {
-            $0.loadingState = .disabled
+            $0.loadingState = .loaded
             $0.trains = expected
             $0.lastUpdateTime = newDate
         }
@@ -122,7 +122,7 @@ final class StationDomainTests: XCTestCase {
         await clock.advance(by: .seconds(1))
         
         await store.receive(.receive(.success(Self.expectedTwo))) {
-            $0.loadingState = .disabled
+            $0.loadingState = .loaded
             $0.trains = Self.expectedTwo
             $0.lastUpdateTime = Date(timeIntervalSinceReferenceDate: 1)
         }
