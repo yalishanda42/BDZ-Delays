@@ -37,11 +37,16 @@ public struct StationReducer: ReducerProtocol {
         case receive(TaskResult<[TrainAtStation]>)
         case enableRefresh
         
+        /// Execute the long-running effect,
+        /// associated with the lifetime of the feature.
+        case task
+        
         /// To be invoked before destroying
         case finalize
     }
     
     @Dependency(\.continuousClock) var clock
+    @Dependency(\.calendar) var calendar
     @Dependency(\.date.now) var now
     @Dependency(\.stationRepository) var stationRepository
     
@@ -49,6 +54,26 @@ public struct StationReducer: ReducerProtocol {
     
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
+        case .task:
+            return .run { [
+                lastUpdateDate = state.lastUpdateTime,
+                loadingState = state.loadingState
+            ] send in
+                for await _ in clock.timer(interval: .seconds(1)) {
+                    let isInTheSameMinute = lastUpdateDate
+                        .map {
+                            let components: Set<Calendar.Component> = [.day, .hour, .minute]
+                            let entryComponents = calendar.dateComponents(components, from: $0)
+                            let nowComponents = calendar.dateComponents(components, from: now)
+                            return entryComponents == nowComponents
+                        }
+                        ?? false
+                    
+                    if loadingState != .loading && !isInTheSameMinute {
+                        await send(.refresh)
+                    }
+                }
+            }
         case .refresh:
             state.loadingState = .loading
             return .concatenate(
