@@ -23,7 +23,7 @@ public struct StationView: View {
     
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { vs in
-            AnyView(content(vs))
+            content(vs)
                 .navigationTitle(vs.station.name)
                 .toolbar {
                     if let time = vs.lastUpdateTime {
@@ -31,7 +31,7 @@ public struct StationView: View {
                     }
                     
                     switch vs.loadingState {
-                    case .loading where !vs.trains.isEmpty:
+                    case .loading:
                         ProgressView()
                     case .failed:
                         Button {
@@ -56,21 +56,27 @@ public struct StationView: View {
         }
     }
     
-    private func content(_ vs: ViewStoreOf<StationReducer>) -> any View {
+    @ViewBuilder
+    private func content(_ vs: ViewStoreOf<StationReducer>) -> some View {
         switch vs.loadingState {
         case .loading where vs.trains.isEmpty:
-            return ProgressView()
+            List(0..<10) { _ in
+                Section {
+                    PlaceholderTrainView()
+                        .listRowInsets(.init())
+                }
+            }
         case .failed where vs.trains.isEmpty:
-            return VStack {
+            VStack {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundColor(.red)
                 Text("Неуспешен опит за взимане на данните. Дали имате интернет?")
             }
         case .enabled where vs.trains.isEmpty,
              .disabled where vs.trains.isEmpty:
-            return Text("Няма пътнически влакове за следващите 6 часа.")
+            Text("Няма пътнически влакове за следващите 6 часа.")
         default:
-            return List(vs.trains) { train in
+            List(vs.trains) { train in
                     Section {
                         TrainView(vm: train.asViewModel)
                             .listRowInsets(.init())
@@ -81,6 +87,19 @@ public struct StationView: View {
                     }
                 }
         }
+    }
+}
+
+
+private struct PlaceholderTrainView: View {
+    var body: some View {
+        TrainView(vm: .init(
+            id: "БВ 2112",
+            from: "Станция",
+            to: "Станция",
+            operation: .leftStationOrTerminated
+        ))
+        .redacted(reason: .placeholder)
     }
 }
 
@@ -203,6 +222,24 @@ struct StationView_Previews: PreviewProvider {
                 }
             ))
         }.previewDisplayName("Empty list")
+        
+        NavigationView {
+            StationView(store: .init(
+                initialState: .init(
+                    station: .gornaOryahovitsa
+                ),
+                reducer: StationReducer(),
+                prepareDependencies: {
+                    $0.context = .preview
+                    $0.stationRepository.fetchTrainsAtStation = { _ in
+                        for await _ in TestClock().timer(interval: .seconds(420)) {
+                            return testModels
+                        }
+                        return []
+                    }
+                }
+            ))
+        }.previewDisplayName("Loading")
     }
     
     private static var testModels: [TrainAtStation] =
