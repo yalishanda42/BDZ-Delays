@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios build_app_debug
 ```
 
-Build the app in debug configuration
+Build the iOS app in debug configuration for iOS 16.4
 
 ### ios tests
 
@@ -30,6 +30,19 @@ Build the app in debug configuration
 ```
 
 Run all tests
+
+----
+
+
+## Mac
+
+### mac build_app_debug
+
+```sh
+[bundle exec] fastlane mac build_app_debug
+```
+
+Build the macOS app in debug configuration for macOS 13
 
 ----
 

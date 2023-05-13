@@ -16,9 +16,8 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Build the app in debug configuration"
+  desc "Build the iOS app in debug configuration for iOS 16.4"
   lane :build_app_debug do
-    xcversion(version: "14.3")
     build_ios_app(
       project: "BDZDelays.xcodeproj",
       scheme: "BDZDelays",
@@ -33,7 +32,6 @@ platform :ios do
 
   desc "Run all tests"
   lane :tests do
-    xcversion(version: "14.3")
     sh('rm -rf "$(pwd)/test_output"')
     for scheme in [
       "StationDomain", 
@@ -48,5 +46,20 @@ platform :ios do
         output_directory: Dir.pwd + "/test_output"  # https://github.com/fastlane/fastlane/issues/20012
       )
     end
+  end
+end
+
+platform :mac do
+  desc "Build the macOS app in debug configuration for macOS 13"
+  lane :build_app_debug do
+    build_mac_app(
+      project: "BDZDelays.xcodeproj",
+      scheme: "BDZDelays",
+      configuration: "Debug",
+      clean: true,
+      export_method: "development",
+      skip_codesigning: true,
+      skip_archive: true,
+    )
   end
 end
