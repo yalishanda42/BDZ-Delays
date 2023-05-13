@@ -40,6 +40,10 @@ public struct SearchStationReducer: ReducerProtocol {
             self.locationStatus = locationStatus
             self.selectedStation = selectedStation
         }
+        
+        public var isSearching: Bool {
+            !query.isEmpty
+        }
     }
     
     public enum Action: Equatable {

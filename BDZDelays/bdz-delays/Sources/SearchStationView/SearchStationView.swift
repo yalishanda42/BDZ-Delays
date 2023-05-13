@@ -54,13 +54,14 @@ private struct MasterView: View {
             get: { vs.selectedStation?.station },
             set: { vs.send(.selectStation($0)) }
         )) {
-            if vs.locationStatus != .unableToUseLocation {
+            if vs.locationStatus != .unableToUseLocation
+                && !vs.isSearching {
                 Section("Най-близката") {
                     NearestStationView(vs: vs)
                 }
             }
             
-            Section("Всички") {
+            Section(vs.isSearching ? "Резултати" : "Всички") {
                 ForEach(vs.filteredStations) { station in
                     NavigationLink(value: station) {
                         Text(station.name)
