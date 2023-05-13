@@ -27,7 +27,7 @@ public struct SearchStationReducer: ReducerProtocol {
         public var locationStatus: LocationStatus
         
         // Child screen
-        public var selectedStation: StationReducer.State?
+        public var stationState: StationReducer.State?
         
         public init(
             filteredStations: [BGStation] = BGStation.allCases,
@@ -38,7 +38,7 @@ public struct SearchStationReducer: ReducerProtocol {
             self.filteredStations = filteredStations
             self.query = query
             self.locationStatus = locationStatus
-            self.selectedStation = selectedStation
+            self.stationState = selectedStation
         }
         
         public var isSearching: Bool {
@@ -101,12 +101,12 @@ public struct SearchStationReducer: ReducerProtocol {
                     return .send(.stationAction(.finalize))
                 }
                 
-                guard new != state.selectedStation?.station else {
+                guard new != state.stationState?.station else {
                     // the station is already selected
                     return .none
                 }
                 
-                state.selectedStation = .init(station: new)
+                state.stationState = .init(station: new)
                 return .send(.stationAction(.refresh))
                 
             case .askForLocationPersmission:
@@ -122,12 +122,12 @@ public struct SearchStationReducer: ReducerProtocol {
             case .stationAction(let childAction):
                 // Child screen
                 if case .finalize = childAction {
-                    state.selectedStation = nil
+                    state.stationState = nil
                 }
                 
                 return .none
             }
-        }.ifLet(\.selectedStation, action: /Action.stationAction) {
+        }.ifLet(\.stationState, action: /Action.stationAction) {
             StationReducer()
         }
     }

@@ -24,7 +24,7 @@ public struct SearchStationView: View {
             NavigationSplitView {
                 MasterView(vs: vs)
             } detail: {
-                if let selected = vs.selectedStation {
+                if let selected = vs.stationState {
                     StationView(store: store.scope(
                         state: { _ in selected },
                         action: SearchStationReducer.Action.stationAction
@@ -51,7 +51,7 @@ private struct MasterView: View {
 
     var body: some View {
         List(selection: Binding<BGStation?>(
-            get: { vs.selectedStation?.station },
+            get: { vs.stationState?.station },
             set: { vs.send(.selectStation($0)) }
         )) {
             if vs.locationStatus != .unableToUseLocation
