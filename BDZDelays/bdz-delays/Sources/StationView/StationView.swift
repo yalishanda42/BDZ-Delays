@@ -77,15 +77,15 @@ public struct StationView: View {
             Text("Няма пътнически влакове за следващите 6 часа.")
         default:
             List(vs.trains) { train in
-                    Section {
-                        TrainView(vm: train.asViewModel)
-                            .listRowInsets(.init())
-                    }
-                }.refreshable {
-                    await vs.send(.refresh) {
-                        $0.loadingState == .loading
-                    }
+                Section {
+                    TrainView(vm: train.asViewModel)
+                        .listRowInsets(.init())
                 }
+            }.refreshable {
+                await vs.send(.refresh) {
+                    $0.loadingState == .loading
+                }
+            }
         }
     }
 }
