@@ -90,7 +90,7 @@ public struct StationReducer: ReducerProtocol {
         case .receive(.success(let trains)):
             state.lastUpdateTime = now
             state.trains = trains
-            state.loadingState = .enabled
+            state.loadingState = .disabled
         
         case .receive(.failure):
             state.loadingState = .failed
