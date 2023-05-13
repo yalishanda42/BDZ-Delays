@@ -20,7 +20,9 @@ final class StationDomainTests: XCTestCase {
             $0.date.now = refreshDate
         }
 
-        await store.send(.refresh)
+        await store.send(.refresh) {
+            $0.loadingState = .loading
+        }
         await store.receive(.receive(.success(expected))) {
             $0.loadingState = .loaded
             $0.trains = expected
@@ -83,7 +85,7 @@ final class StationDomainTests: XCTestCase {
         }
     }
     
-    func test_refreshTwice_cancelsPrevious() async throws {
+    func test_refreshTwice_doesNotCancelOrDouble() async throws {
         let results = [Self.expectedOne, Self.expectedTwo]
         
         let clock = TestClock()
@@ -99,7 +101,7 @@ final class StationDomainTests: XCTestCase {
                 fetchTrainsAtStation: { _ in
                     let count = await counter.incremented()
                     // modelling first request to be taking a lot of time
-                    // so that the second can complete before it
+                    // so that the second would complete before it if allowed to
                     let seconds = count == 2 ? 1 : 42
                     for await _ in clock.timer(interval: .seconds(seconds)) {
                         return results[count - 1]
@@ -116,18 +118,18 @@ final class StationDomainTests: XCTestCase {
             }()
         }
 
-        await store.send(.refresh)
+        await store.send(.refresh) {
+            $0.loadingState = .loading
+        }
         await store.send(.refresh)
         
-        await clock.advance(by: .seconds(1))
-        
-        await store.receive(.receive(.success(Self.expectedTwo))) {
+        await clock.advance(by: .seconds(1)) // nothing should be received
+        await clock.advance(by: .seconds(41)) // first request is now completed
+        await store.receive(.receive(.success(Self.expectedOne))) {
             $0.loadingState = .loaded
-            $0.trains = Self.expectedTwo
+            $0.trains = Self.expectedOne
             $0.lastUpdateTime = Date(timeIntervalSinceReferenceDate: 1)
         }
-        
-        await clock.advance(by: .seconds(41)) // nothing should be received
     }
 }
 

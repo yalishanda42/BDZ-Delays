@@ -21,7 +21,7 @@ public struct StationReducer: ReducerProtocol {
         
         public init(
             station: BGStation,
-            loadingState: RefreshState = .loading,
+            loadingState: RefreshState = .loaded,
             trains: [TrainAtStation] = [],
             lastUpdateTime: Date? = nil
         ) {
@@ -36,11 +36,14 @@ public struct StationReducer: ReducerProtocol {
         case refresh
         case receive(TaskResult<[TrainAtStation]>)
         
+        /// Received on every new second.
+        case tick
+        
         /// Execute the long-running effect,
         /// associated with the lifetime of the feature.
         case task
         
-        /// To be invoked before destroying
+        /// To be invoked before destroying.
         case finalize
     }
     
@@ -54,37 +57,39 @@ public struct StationReducer: ReducerProtocol {
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .task:
-            return .run { [
-                lastUpdateDate = state.lastUpdateTime,
-                loadingState = state.loadingState
-            ] send in
+            return .run { send in
                 for await _ in clock.timer(interval: .seconds(1)) {
-                    let isInTheSameMinute = lastUpdateDate
-                        .map {
-                            let components: Set<Calendar.Component> = [.day, .hour, .minute]
-                            let entryComponents = calendar.dateComponents(components, from: $0)
-                            let nowComponents = calendar.dateComponents(components, from: now)
-                            return entryComponents == nowComponents
-                        }
-                        ?? false
-                    
-                    if loadingState != .loading && !isInTheSameMinute {
-                        await send(.refresh)
-                    }
+                    await send(.tick)
                 }
             }
+            
+        case .tick:
+            // Refresh on every new calendar minute.
+            let isInTheSameMinute = state.lastUpdateTime
+                .map {
+                    let components: Set<Calendar.Component> = [.day, .hour, .minute]
+                    let entryComponents = calendar.dateComponents(components, from: $0)
+                    let nowComponents = calendar.dateComponents(components, from: now)
+                    return entryComponents == nowComponents
+                }
+                ?? false
+            
+            if !isInTheSameMinute {
+                return .send(.refresh)
+            }
+            
         case .refresh:
+            guard state.loadingState != .loading else {
+                return .none
+            }
+            
             state.loadingState = .loading
-            return .concatenate(
-                // First cancel ongoing fetch
-                .cancel(id: TrainsTaskCancelID.self),
-                // Then send another
-                .task { [station = state.station] in
-                    await .receive(TaskResult {
-                        try await stationRepository.fetchTrainsAtStation(station)
-                    })
-                }.cancellable(id: TrainsTaskCancelID.self)
-            )
+            
+            return .task { [station = state.station] in
+                await .receive(TaskResult {
+                    try await stationRepository.fetchTrainsAtStation(station)
+                })
+            }
             
         case .receive(.success(let trains)):
             state.lastUpdateTime = now

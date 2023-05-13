@@ -47,6 +47,9 @@ public struct StationView: View {
                 .onAppear {
                     vs.send(.refresh)
                 }
+                .task {
+                    await vs.send(.task).finish()
+                }
         }
     }
     
