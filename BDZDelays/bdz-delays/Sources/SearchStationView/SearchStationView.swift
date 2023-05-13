@@ -62,14 +62,29 @@ private struct MasterView: View {
                     Text("Най-близката")
                 } footer: {
                     if vs.locationStatus == .denied {
-                        Text("За да се определи коя е най-близката ЖП гара, трябва да се разреши достъп до местоположението в настройките на приложението (натиснете горния бутон, за да ви отведе там)")}
+                        Text("За да се определи коя е най-близката ЖП гара, трябва да се разреши достъп до местоположението в настройките на приложението (натиснете горния бутон, за да ви отведе там)")
+                        
+                    }
                 }
             }
             
-            Section(vs.isSearching ? "Резултати" : "Всички") {
+            Section {
                 ForEach(vs.filteredStations) { station in
                     NavigationLink(value: station) {
                         Text(station.name)
+                    }
+                }
+            } header: {
+                if vs.isSearching {
+                    Text("Резултати")
+                } else {
+                    Text("Всички")
+                }
+            } footer: {
+                if !vs.isSearching {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Информацията се предоставя от https://rovr.info.")
+                        Text("Код на приложението: https://github.com/yalishanda42/BDZ-Delays")
                     }
                 }
             }
