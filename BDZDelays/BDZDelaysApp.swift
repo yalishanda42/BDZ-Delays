@@ -12,6 +12,7 @@ import SearchStationDomain
 
 import StationRepositoryLive
 import LocationServiceLive
+import SettingsURLServiceLive
 
 @main
 struct BDZDelaysApp: App {

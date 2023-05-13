@@ -56,8 +56,13 @@ private struct MasterView: View {
         )) {
             if vs.locationStatus != .unableToUseLocation
                 && !vs.isSearching {
-                Section("Най-близката") {
+                Section {
                     NearestStationView(vs: vs)
+                } header: {
+                    Text("Най-близката")
+                } footer: {
+                    if vs.locationStatus == .denied {
+                        Text("За да се определи коя е най-близката ЖП гара, трябва да се разреши достъп до местоположението в настройките на приложенето (натиснете горният бутон, за да ви отведе там)")}
                 }
             }
             
@@ -101,7 +106,6 @@ private struct NearestStationView: View {
                     vs.send(.locationSettings)
                 } label: {
                     Text("Достъпът до локацията е отказан")
-                        .italic()
                 }
             case .determining:
                 Image(systemName: "circle.dotted")

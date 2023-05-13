@@ -10,34 +10,34 @@ let package = Package(
     // MARK: - Products
     
     products: [
-        // Shared Models
-        
-        .library(name: "SharedModels", targets: ["SharedModels"]),
-        
         // Train Reusable View
-        
         .library(name: "TrainView", targets: ["TrainView"]),
         
         // Station Feature
-        
         .library(name: "StationView", targets: ["StationView"]),
         .library(name: "StationDomain", targets: ["StationDomain"]),
-        .library(name: "StationRepository", targets: ["StationRepository"]),
-        .library(name: "StationRepositoryLive", targets: ["StationRepositoryLive"]),
         
         // Search Station Feature
-        
         .library(name: "SearchStationView", targets: ["SearchStationView"]),
         .library(name: "SearchStationDomain", targets: ["SearchStationDomain"]),
+        
+        // Shared Models
+        .library(name: "SharedModels", targets: ["SharedModels"]),
+        
+        // Services and repositoriss interfaces
+        .library(name: "StationRepository", targets: ["StationRepository"]),
         .library(name: "LocationService", targets: ["LocationService"]),
+        .library(name: "SettingsURLService", targets: ["SettingsURLService"]),
+        
+        // Services and repositories live implmentations
+        .library(name: "StationRepositoryLive", targets: ["StationRepositoryLive"]),
         .library(name: "LocationServiceLive", targets: ["LocationServiceLive"]),
+        .library(name: "SettingsURLServiceLive", targets: ["SettingsURLServiceLive"]),
         
         // ROVR scraping tools
-        
         .library(name: "ROVR", targets: ["ROVR"]),
         
         // Custom Encodings
-        
         .library(name: "CustomEncoding", targets: ["CustomEncoding"]),
     ],
     
@@ -52,13 +52,6 @@ let package = Package(
     // MARK: - Targets
     
     targets: [
-        
-        // Shared Models
-        
-        .target(
-            name: "SharedModels",
-            dependencies: []
-        ),
         
         // Train Reusable View
         
@@ -85,22 +78,6 @@ let package = Package(
             name: "StationDomainTests",
             dependencies: ["StationDomain"]
         ),
-        .target(
-            name: "StationRepository",
-            dependencies: [
-                "SharedModels",
-                .product(name: "Dependencies", package: "swift-dependencies"),
-            ]
-        ),
-        .target(
-            name: "StationRepositoryLive",
-            dependencies: [
-                "StationRepository",
-                "SharedModels",
-                "ROVR",
-                .product(name: "Dependencies", package: "swift-dependencies"),
-            ]
-        ),
         
         // Search Station Feature
         
@@ -114,12 +91,30 @@ let package = Package(
                 "SharedModels",
                 "StationDomain",
                 "LocationService",
+                "SettingsURLService",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
         .testTarget(
             name: "SearchStationDomainTests",
             dependencies: ["SearchStationDomain"]
+        ),
+        
+        // Shared Models
+        
+        .target(
+            name: "SharedModels",
+            dependencies: []
+        ),
+        
+        // Services and repositories interfaces
+        
+        .target(
+            name: "StationRepository",
+            dependencies: [
+                "SharedModels",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
         ),
         .target(
             name: "LocationService",
@@ -129,11 +124,36 @@ let package = Package(
             ]
         ),
         .target(
+            name: "SettingsURLService",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
+        
+        // Services and repositories live implementations
+        
+        .target(
+            name: "StationRepositoryLive",
+            dependencies: [
+                "StationRepository",
+                "SharedModels",
+                "ROVR",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
+        .target(
             name: "LocationServiceLive",
             dependencies: [
                 "LocationService",
                 "SharedModels",
                 "ROVR",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
+        .target(
+            name: "SettingsURLServiceLive",
+            dependencies: [
+                "SettingsURLService",
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),

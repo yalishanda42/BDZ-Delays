@@ -7,11 +7,12 @@
 
 import Foundation
 import ComposableArchitecture
+import Dependencies
 
 import SharedModels
 import StationDomain
-import Dependencies
 import LocationService
+import SettingsURLService
 
 public struct SearchStationReducer: ReducerProtocol {
     
@@ -65,6 +66,7 @@ public struct SearchStationReducer: ReducerProtocol {
     }
     
     @Dependency(\.locationService) var locationService
+    @Dependency(\.settingsService) var settingsService
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
@@ -116,8 +118,9 @@ public struct SearchStationReducer: ReducerProtocol {
                 }
                 
             case .locationSettings:
-                // TODO
-                return .none
+                return .fireAndForget {
+                    await settingsService.openSettings()
+                }
                 
             case .stationAction(let childAction):
                 // Child screen
