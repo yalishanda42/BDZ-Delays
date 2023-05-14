@@ -12,6 +12,8 @@ import SearchStationDomain
 import StationView
 import SharedModels
 
+private let favoriteIconColor = Color.teal
+
 public struct SearchStationView: View {
     public let store: StoreOf<SearchStationReducer>
     
@@ -91,7 +93,7 @@ private struct MasterView: View {
                         HStack {
                             if vs.state.isStationFavorite(station) {
                                 Image(systemName: "star.fill")
-                                    .foregroundColor(.teal)
+                                    .foregroundColor(favoriteIconColor)
                             }
                             Text(station.name)
                         }
@@ -171,14 +173,18 @@ fileprivate extension View {
         vs: ViewStore<SearchStationReducer.State, SearchStationReducer.Action>
     ) -> some View {
         swipeActions(edge: .leading, allowsFullSwipe: true) {
-            Button {
-                vs.send(.toggleSaveStation(station))
-            } label: {
-                if vs.state.isStationFavorite(station) {
+            if vs.state.isStationFavorite(station) {
+                Button {
+                    vs.send(.toggleSaveStation(station))
+                } label: {
                     Label("Премахни", systemImage: "star.slash.fill")
-                } else {
-                    Label("Запази", systemImage: "star.fill")
                 }
+            } else {
+                Button {
+                    vs.send(.toggleSaveStation(station))
+                } label: {
+                    Label("Запази", systemImage: "star.fill")
+                }.tint(favoriteIconColor)
             }
         }
     }
