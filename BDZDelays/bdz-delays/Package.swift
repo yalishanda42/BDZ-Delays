@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -28,11 +28,13 @@ let package = Package(
         .library(name: "StationRepository", targets: ["StationRepository"]),
         .library(name: "LocationService", targets: ["LocationService"]),
         .library(name: "SettingsURLService", targets: ["SettingsURLService"]),
+        .library(name: "FavoritesService", targets: ["FavoritesService"]),
         
         // Services and repositories live implmentations
         .library(name: "StationRepositoryLive", targets: ["StationRepositoryLive"]),
         .library(name: "LocationServiceLive", targets: ["LocationServiceLive"]),
         .library(name: "SettingsURLServiceLive", targets: ["SettingsURLServiceLive"]),
+        .library(name: "FavoritesServiceLive", targets: ["FavoritesServiceLive"]),
         
         // ROVR scraping tools
         .library(name: "ROVR", targets: ["ROVR"]),
@@ -47,6 +49,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.52.0"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.4.2"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
+        .package(url: "https://github.com/realm/realm-swift.git", from: "10.39.1"),
     ],
     
     // MARK: - Targets
@@ -92,6 +95,7 @@ let package = Package(
                 "StationDomain",
                 "LocationService",
                 "SettingsURLService",
+                "FavoritesService",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -129,6 +133,13 @@ let package = Package(
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),
+        .target(
+            name: "FavoritesService",
+            dependencies: [
+                "SharedModels",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
         
         // Services and repositories live implementations
         
@@ -154,6 +165,16 @@ let package = Package(
             name: "SettingsURLServiceLive",
             dependencies: [
                 "SettingsURLService",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
+        .target(
+            name: "FavoritesServiceLive",
+            dependencies: [
+                "FavoritesService",
+                "SharedModels",
+                "ROVR",
+                .product(name: "RealmSwift", package: "realm-swift"),
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),

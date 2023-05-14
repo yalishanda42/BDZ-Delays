@@ -13,6 +13,7 @@ import SharedModels
 import StationDomain
 import LocationService
 import SettingsURLService
+import FavoritesService
 
 public struct SearchStationReducer: ReducerProtocol {
     
@@ -58,6 +59,7 @@ public struct SearchStationReducer: ReducerProtocol {
         case updateQuery(String)
         case selectStation(BGStation?)
         
+        case loadSavedStations([BGStation])
         case toggleSaveStation(BGStation)
         
         case locationStatusUpdate(LocationStatus)
@@ -76,17 +78,26 @@ public struct SearchStationReducer: ReducerProtocol {
     
     @Dependency(\.locationService) var locationService
     @Dependency(\.settingsService) var settingsService
+    @Dependency(\.favoritesService) var favoritesService
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
-                return .run { send in
-                    let stream = await locationService.statusStream()
-                    for await status in stream {
-                        await send(.locationStatusUpdate(status))
+                return .merge(
+                    .run { send in
+                        let stream = await locationService.statusStream()
+                        for await status in stream {
+                            await send(.locationStatusUpdate(status))
+                        }
+                    },
+                    .run { send in
+                        let stations = try await favoritesService.loadFavorites()
+                        await send(.loadSavedStations(stations))
+                    } catch: { error, _ in
+                        print("Failed to retrieve saved stations: \(error)")
                     }
-                }
+                )
                 
             case .locationStatusUpdate(let status):
                 state.locationStatus = status
@@ -119,14 +130,20 @@ public struct SearchStationReducer: ReducerProtocol {
                 
                 state.stationState = .init(station: new)
                 return .send(.stationAction(.refresh))
-                
+            
+            case .loadSavedStations(let statons):
+                state.favoriteStations = statons
+                return .none
+            
             case .toggleSaveStation(let station):
                 if state.isStationFavorite(station) {
                     state.favoriteStations.removeAll { $0 == station }
                 } else {
                     state.favoriteStations.append(station)
                 }
-                return .none
+                return .fireAndForget { [favorites = state.favoriteStations] in
+                    try? await favoritesService.saveFavorites(favorites)
+                }
                 
             case .askForLocationPersmission:
                 state.locationStatus = .determining

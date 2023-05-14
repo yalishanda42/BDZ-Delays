@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74B48B632A11887D0061DD98 /* FavoritesServiceLive */; };
 		74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */; };
 		A0541FE52A08FD8E0077A164 /* SearchStationView in Frameworks */ = {isa = PBXBuildFile; productRef = A0541FE42A08FD8E0077A164 /* SearchStationView */; };
 		A0541FE72A08FDA30077A164 /* SearchStationDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A0541FE62A08FDA30077A164 /* SearchStationDomain */; };
@@ -37,6 +38,7 @@
 				74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */,
 				A0541FE72A08FDA30077A164 /* SearchStationDomain in Frameworks */,
 				A0541FE92A09153F0077A164 /* LocationServiceLive in Frameworks */,
+				74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */,
 				A0541FEB2A0915470077A164 /* StationRepositoryLive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +113,7 @@
 				A0541FE82A09153F0077A164 /* LocationServiceLive */,
 				A0541FEA2A0915470077A164 /* StationRepositoryLive */,
 				74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */,
+				74B48B632A11887D0061DD98 /* FavoritesServiceLive */,
 			);
 			productName = BDZDelays;
 			productReference = A067207B29F31B96008A4D15 /* BDZDelays.app */;
@@ -389,6 +392,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		74B48B632A11887D0061DD98 /* FavoritesServiceLive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FavoritesServiceLive;
+		};
 		74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SettingsURLServiceLive;
