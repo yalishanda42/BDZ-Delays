@@ -61,6 +61,7 @@ public struct SearchStationReducer: ReducerProtocol {
         
         case loadSavedStations([BGStation])
         case toggleSaveStation(BGStation)
+        case moveFavorite(from: IndexSet, to: Int)
         
         case locationStatusUpdate(LocationStatus)
         case askForLocationPersmission
@@ -141,8 +142,19 @@ public struct SearchStationReducer: ReducerProtocol {
                 } else {
                     state.favoriteStations.append(station)
                 }
-                return .fireAndForget { [favorites = state.favoriteStations] in
-                    try? await favoritesService.saveFavorites(favorites)
+                
+                return .run { [favorites = state.favoriteStations] _ in
+                    try await favoritesService.saveFavorites(favorites)
+                } catch: { [favorites = state.favoriteStations] error, _ in
+                    print(".toggleSaveStation: Coud not save favorites=\(favorites), error=\(error)")
+                }
+            
+            case let .moveFavorite(from: from, to: to):
+                state.favoriteStations.move(fromOffsets: from, toOffset: to)
+                return .run { [favorites = state.favoriteStations] _ in
+                    try await favoritesService.saveFavorites(favorites)
+                } catch: { [favorites = state.favoriteStations] error, _ in
+                    print(".moveFavorite: Could not save favorites=\(favorites), error=\(error)")
                 }
                 
             case .askForLocationPersmission:

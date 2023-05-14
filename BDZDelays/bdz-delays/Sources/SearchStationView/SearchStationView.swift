@@ -77,6 +77,8 @@ private struct MasterView: View {
                             Text(station.name)
                                 .favoritable(station: station, vs: vs)
                         }
+                    }.onMove { from, to in
+                        vs.send(.moveFavorite(from: from, to: to))
                     }
                 } header: {
                     Text("Запазени")
