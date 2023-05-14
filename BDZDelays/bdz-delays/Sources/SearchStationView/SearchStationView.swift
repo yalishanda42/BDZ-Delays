@@ -68,10 +68,34 @@ private struct MasterView: View {
                 }
             }
             
+            if !vs.isSearching {
+                Section {
+                    ForEach(vs.favoriteStations) { station in
+                        NavigationLink(value: station) {
+                            Text(station.name)
+                                .favoritable(station: station, vs: vs)
+                        }
+                    }
+                } header: {
+                    Text("Запазени")
+                } footer: {
+                    if vs.favoriteStations.isEmpty {
+                        Text("Можете да си запазвате тук гари чрез плъзване надясно на избрана такава.")
+                    }
+                }
+            }
+            
             Section {
                 ForEach(vs.filteredStations) { station in
                     NavigationLink(value: station) {
-                        Text(station.name)
+                        HStack {
+                            if vs.state.isStationFavorite(station) {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.teal)
+                            }
+                            Text(station.name)
+                        }
+                        .favoritable(station: station, vs: vs)
                     }
                 }
             } header: {
@@ -135,6 +159,26 @@ private struct NearestStationView: View {
                     .foregroundColor(.gray)
             case .unableToUseLocation:
                 EmptyView()
+            }
+        }
+    }
+}
+
+fileprivate extension View {
+    @ViewBuilder
+    func favoritable(
+        station: BGStation,
+        vs: ViewStore<SearchStationReducer.State, SearchStationReducer.Action>
+    ) -> some View {
+        swipeActions(edge: .leading, allowsFullSwipe: true) {
+            Button {
+                vs.send(.toggleSaveStation(station))
+            } label: {
+                if vs.state.isStationFavorite(station) {
+                    Label("Премахни", systemImage: "star.slash.fill")
+                } else {
+                    Label("Запази", systemImage: "star.fill")
+                }
             }
         }
     }

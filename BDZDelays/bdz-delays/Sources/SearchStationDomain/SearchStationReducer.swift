@@ -24,6 +24,7 @@ public struct SearchStationReducer: ReducerProtocol {
     
     public struct State: Equatable {
         public var filteredStations: [BGStation]
+        public var favoriteStations: [BGStation]
         public var query: String
         public var locationStatus: LocationStatus
         
@@ -32,11 +33,13 @@ public struct SearchStationReducer: ReducerProtocol {
         
         public init(
             filteredStations: [BGStation] = BGStation.allCases,
+            favoriteStations: [BGStation] = [],
             query: String = "",
             locationStatus: LocationStatus = .unableToUseLocation,
             selectedStation: StationReducer.State? = nil
         ) {
             self.filteredStations = filteredStations
+            self.favoriteStations = favoriteStations
             self.query = query
             self.locationStatus = locationStatus
             self.stationState = selectedStation
@@ -45,11 +48,17 @@ public struct SearchStationReducer: ReducerProtocol {
         public var isSearching: Bool {
             !query.isEmpty
         }
+        
+        public func isStationFavorite(_ station: BGStation) -> Bool {
+            favoriteStations.contains(station)
+        }
     }
     
     public enum Action: Equatable {
         case updateQuery(String)
         case selectStation(BGStation?)
+        
+        case toggleSaveStation(BGStation)
         
         case locationStatusUpdate(LocationStatus)
         case askForLocationPersmission
@@ -110,6 +119,14 @@ public struct SearchStationReducer: ReducerProtocol {
                 
                 state.stationState = .init(station: new)
                 return .send(.stationAction(.refresh))
+                
+            case .toggleSaveStation(let station):
+                if state.isStationFavorite(station) {
+                    state.favoriteStations.removeAll { $0 == station }
+                } else {
+                    state.favoriteStations.append(station)
+                }
+                return .none
                 
             case .askForLocationPersmission:
                 state.locationStatus = .determining
