@@ -131,7 +131,7 @@ private struct NearestStationView: View {
                     vs.send(.selectStation(station))
                 } label: {
                     Text(station.name)
-                }
+                }.favoritable(station: station, vs: vs)
             case .notYetAskedForAuthorization:
                 Image(systemName: "location")
                     .foregroundColor(.accentColor)
