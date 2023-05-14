@@ -66,7 +66,7 @@ final class SearchStationDomainTests: XCTestCase {
         XCTAssertEqual(calls, 1)
     }
     
-    func test_observesLocation() async throws {
+    func test_task_observesLocation() async throws {
         let statuses: [LocationStatus] = [
             .notYetAskedForAuthorization,
             .authorized(nearestStation: .sofia),
@@ -90,9 +90,12 @@ final class SearchStationDomainTests: XCTestCase {
                     return nil
                 }
             }
+            $0.favoritesService.loadFavorites = {[]}
         }
         
         let task = await store.send(.task)
+        
+        await store.receive(.loadSavedStations([]))
         
         for status in statuses {
             await clock.advance(by: .seconds(1))
@@ -102,6 +105,77 @@ final class SearchStationDomainTests: XCTestCase {
         }
         
         await task.cancel()  // done by SwiftUI
+    }
+    
+    func test_task_loadsPersistedInfo() async throws {
+        let expected: [BGStation] = [.dobrich, .povelyanovo, .sofia]
+        
+        let store = TestStore(
+            initialState: SearchStationReducer.State(),
+            reducer: SearchStationReducer()
+        ) {
+            $0.favoritesService.loadFavorites = { expected }
+        }
+        
+        let task = await store.send(.task)
+        await store.receive(.loadSavedStations(expected)) {
+            $0.favoriteStations = expected
+        }
+        
+        await task.cancel()  // done by SwiftUI
+    }
+    
+    func test_toggleSave_savesAndThenUnsaves() async throws {
+        let station = BGStation.dobrich
+        let spy = Spy()
+        
+        let store = TestStore(
+            initialState: SearchStationReducer.State(),
+            reducer: SearchStationReducer()
+        ) {
+            $0.favoritesService.saveFavorites = { _ in
+                await spy.call()
+            }
+        }
+        
+        await store.send(.toggleSaveStation(station)) {
+            $0.favoriteStations = [station]
+        }
+        
+        let invocations1 = await spy.calls
+        XCTAssertEqual(invocations1, 1)
+        
+        await store.send(.toggleSaveStation(station)) {
+            $0.favoriteStations = []
+        }
+        
+        let invocations2 = await spy.calls
+        XCTAssertEqual(invocations2, 2)
+    }
+    
+    func test_move_movesAndSaves() async throws {
+        let initial: [BGStation] = [.dobrich, .povelyanovo, .sofia]
+        let expected: [BGStation] = [.povelyanovo, .sofia, .dobrich]
+        
+        let spy = Spy()
+        
+        let store = TestStore(
+            initialState: SearchStationReducer.State(
+                favoriteStations: initial
+            ),
+            reducer: SearchStationReducer()
+        ) {
+            $0.favoritesService.saveFavorites = { _ in
+                await spy.call()
+            }
+        }
+        
+        await store.send(.moveFavorite(from: [0], to: 3)) {
+            $0.favoriteStations = expected
+        }
+        
+        let invocations = await spy.calls
+        XCTAssertEqual(invocations, 1)
     }
 }
 
