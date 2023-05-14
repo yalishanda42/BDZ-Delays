@@ -24,7 +24,7 @@ public enum RovrDecoder {
         return String(decoding: pageData, as: WindowsCP1251.self)
     }
     
-    public static func decodeStationId(fromLocationData data: Data) throws -> Int {
+    public static func decodeStation(fromLocationData data: Data) throws -> ROVRStation {
         guard let string = String(data: data, encoding: .utf8) else {
             throw Error.invalidEncoding
         }
@@ -34,11 +34,12 @@ public enum RovrDecoder {
         // The second number is the station ID.
         let parts = string.split(separator: " ")
         guard parts.count > 2,
-              let id = Int(parts[1])
+              let id = Int(parts[1]),
+              let station = ROVRStation(rawValue: id)
         else {
             throw Error.invalidData
         }
         
-        return id
+        return station
     }
 }

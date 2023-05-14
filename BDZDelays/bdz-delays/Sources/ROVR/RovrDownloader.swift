@@ -21,7 +21,7 @@ public enum RovrDownloader {
     
     // MARK: - Page
     
-    public static func downloadPageData(stationId: Int) async throws -> Data {
+    public static func downloadPageData(station: ROVRStation) async throws -> Data {
         let request: URLRequest = {
             var result = URLRequest(url: baseURL)
             result.httpMethod = "POST"
@@ -30,7 +30,7 @@ public enum RovrDownloader {
                 "orientation": "P",
                 "mobver": "1",
                 "active_View": "2",
-                "station_id": "\(stationId)",
+                "station_id": "\(station.rawValue)",
                 "scrpos": "0",
             ]
             result.httpBody = parametrize(dict: data)

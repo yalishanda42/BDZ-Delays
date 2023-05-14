@@ -163,6 +163,7 @@ let package = Package(
         .target(
             name: "ROVR",
             dependencies: [
+                "SharedModels",
                 "CustomEncoding",
                 "SwiftSoup",
             ]

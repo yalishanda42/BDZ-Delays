@@ -12,11 +12,11 @@ final class ROVRTests: XCTestCase {
     
     func test_locationResponse_decodesStationIdOK() async throws {
         let testResponse = "1683384235 18 2021.6069047926 1626 1059.1314442427".data(using: .utf8)!
-        let expected = 18
+        let expected = ROVRStation.sofia
         
-        let result = try RovrDecoder.decodeStationId(fromLocationData: testResponse)
+        let result = try RovrDecoder.decodeStation(fromLocationData: testResponse)
         
-        XCTAssertEqual(result, expected)
+        XCTAssertEqual(result.rawValue, expected.rawValue)
     }
     
     func test_fileOne_parsesOK() async throws {
