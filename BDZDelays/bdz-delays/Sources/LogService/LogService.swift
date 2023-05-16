@@ -1,8 +1,52 @@
-//
-//  File.swift
-//  
-//
-//  Created by AI on 16.05.23.
-//
+public protocol LogProvider {
+    func log(
+        _ level: LogService.Level,
+        _ message: String,
+        file: String,
+        function: String,
+        line: UInt
+    )
+}
 
-import Foundation
+public struct LogService {
+    public enum Level: Equatable {
+        case info
+        case error
+    }
+    
+    let providers: [LogProvider]
+    
+    public init(providers: [LogProvider] = []) {
+        self.providers = providers
+    }
+    
+    public func info(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        log(.info, message, file: file, function: function, line: line)
+    }
+    
+    public func error(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        log(.error, message, file: file, function: function, line: line)
+    }
+    
+    internal func log(
+        _ level: Level,
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        for provider in providers {
+            provider.log(level, message, file: file, function: function, line: line)
+        }
+    }
+}

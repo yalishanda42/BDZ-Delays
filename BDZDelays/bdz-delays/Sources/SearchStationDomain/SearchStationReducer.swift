@@ -11,9 +11,11 @@ import Dependencies
 
 import SharedModels
 import StationDomain
+
 import LocationService
 import SettingsURLService
 import FavoritesService
+import LogService
 
 public struct SearchStationReducer: ReducerProtocol {
     
@@ -80,6 +82,7 @@ public struct SearchStationReducer: ReducerProtocol {
     @Dependency(\.locationService) var locationService
     @Dependency(\.settingsService) var settingsService
     @Dependency(\.favoritesService) var favoritesService
+    @Dependency(\.log) var log
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
@@ -96,7 +99,7 @@ public struct SearchStationReducer: ReducerProtocol {
                         let stations = try await favoritesService.loadFavorites()
                         await send(.loadSavedStations(stations))
                     } catch: { error, _ in
-                        print("Failed to retrieve saved stations: \(error)")
+                        log.error("Failed to retrieve saved stations: \(error)")
                     }
                 )
                 
@@ -146,7 +149,9 @@ public struct SearchStationReducer: ReducerProtocol {
                 return .run { [favorites = state.favoriteStations] _ in
                     try await favoritesService.saveFavorites(favorites)
                 } catch: { [favorites = state.favoriteStations] error, _ in
-                    print(".toggleSaveStation: Coud not save favorites=\(favorites), error=\(error)")
+                    log.error(
+                        ".toggleSaveStation: Coud not save favorites=\(favorites), error=\(error)"
+                    )
                 }
             
             case let .moveFavorite(from: from, to: to):
@@ -154,7 +159,9 @@ public struct SearchStationReducer: ReducerProtocol {
                 return .run { [favorites = state.favoriteStations] _ in
                     try await favoritesService.saveFavorites(favorites)
                 } catch: { [favorites = state.favoriteStations] error, _ in
-                    print(".moveFavorite: Could not save favorites=\(favorites), error=\(error)")
+                    log.error(
+                        ".moveFavorite: Could not save favorites=\(favorites), error=\(error)"
+                    )
                 }
                 
             case .askForLocationPersmission:

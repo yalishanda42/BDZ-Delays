@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 import SharedModels
 import StationRepository
+import LogService
 
 public struct StationReducer: ReducerProtocol {
     
@@ -50,7 +51,9 @@ public struct StationReducer: ReducerProtocol {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.calendar) var calendar
     @Dependency(\.date.now) var now
+    
     @Dependency(\.stationRepository) var stationRepository
+    @Dependency(\.log) var log
     
     public init() {}
     
@@ -96,8 +99,9 @@ public struct StationReducer: ReducerProtocol {
             state.trains = trains
             state.loadingState = .loaded
         
-        case .receive(.failure):
+        case .receive(.failure(let error)):
             state.loadingState = .failed
+            log.error("Faied to fetch trains data for station \(state.station). error=\(error)")
             
         case .finalize:
             return .cancel(id: TrainsTaskCancelID.self)

@@ -15,6 +15,7 @@ import StationRepositoryLive
 import LocationServiceLive
 import SettingsURLServiceLive
 import FavoritesServiceLive
+import LogServiceLive
 // =======================================
 
 @main

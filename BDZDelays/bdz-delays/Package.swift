@@ -29,12 +29,14 @@ let package = Package(
         .library(name: "LocationService", targets: ["LocationService"]),
         .library(name: "SettingsURLService", targets: ["SettingsURLService"]),
         .library(name: "FavoritesService", targets: ["FavoritesService"]),
+        .library(name: "LogService", targets: ["LogService"]),
         
         // Services and repositories live implmentations
         .library(name: "StationRepositoryLive", targets: ["StationRepositoryLive"]),
         .library(name: "LocationServiceLive", targets: ["LocationServiceLive"]),
         .library(name: "SettingsURLServiceLive", targets: ["SettingsURLServiceLive"]),
         .library(name: "FavoritesServiceLive", targets: ["FavoritesServiceLive"]),
+        .library(name: "LogServiceLive", targets: ["LogServiceLive"]),
         
         // ROVR scraping tools
         .library(name: "ROVR", targets: ["ROVR"]),
@@ -50,6 +52,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.4.2"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
         .package(url: "https://github.com/realm/realm-swift.git", from: "10.39.1"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.5.2"),
     ],
     
     // MARK: - Targets
@@ -74,6 +77,7 @@ let package = Package(
             dependencies: [
                 "SharedModels",
                 "StationRepository",
+                "LogService",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -96,6 +100,7 @@ let package = Package(
                 "LocationService",
                 "SettingsURLService",
                 "FavoritesService",
+                "LogService",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -140,6 +145,12 @@ let package = Package(
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),
+        .target(
+            name: "LogService",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
         
         // Services and repositories live implementations
         
@@ -176,6 +187,14 @@ let package = Package(
                 "ROVR",
                 .product(name: "RealmSwift", package: "realm-swift"),
                 .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
+        ),
+        .target(
+            name: "LogServiceLive",
+            dependencies: [
+                "LogService",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "Logging", package: "swift-log"),
             ]
         ),
         
