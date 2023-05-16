@@ -10,10 +10,12 @@ import SwiftUI
 import SearchStationView
 import SearchStationDomain
 
+// === List all live dependencies here ===
 import StationRepositoryLive
 import LocationServiceLive
 import SettingsURLServiceLive
 import FavoritesServiceLive
+// =======================================
 
 @main
 struct BDZDelaysApp: App {
@@ -21,7 +23,7 @@ struct BDZDelaysApp: App {
         WindowGroup {
             SearchStationView(store: .init(
                 initialState: .init(),
-                reducer: SearchStationReducer()
+                reducer: SearchStationReducer()._printChanges()
             ))
         }
     }
