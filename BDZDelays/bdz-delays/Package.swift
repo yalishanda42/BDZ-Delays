@@ -53,6 +53,7 @@ let package = Package(
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
         .package(url: "https://github.com/realm/realm-swift.git", from: "10.39.1"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.5.2"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.9.0"),
     ],
     
     // MARK: - Targets
@@ -195,6 +196,7 @@ let package = Package(
                 "LogService",
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "Logging", package: "swift-log"),
+                .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
             ]
         ),
         

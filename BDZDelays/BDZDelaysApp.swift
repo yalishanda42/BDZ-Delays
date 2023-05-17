@@ -28,4 +28,10 @@ struct BDZDelaysApp: App {
             ))
         }
     }
+    
+    init() {
+        Firebase.initialize(
+            plistPath: Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist")!
+        )
+    }
 }

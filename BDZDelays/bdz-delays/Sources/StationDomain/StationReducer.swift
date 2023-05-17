@@ -101,7 +101,7 @@ public struct StationReducer: ReducerProtocol {
         
         case .receive(.failure(let error)):
             state.loadingState = .failed
-            log.error("Faied to fetch trains data for station \(state.station). error=\(error)")
+            log.error(error, "Faied to fetch trains data for station \(state.station).")
             
         case .finalize:
             return .cancel(id: TrainsTaskCancelID.self)

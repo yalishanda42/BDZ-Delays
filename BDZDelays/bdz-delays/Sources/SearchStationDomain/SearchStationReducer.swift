@@ -99,7 +99,7 @@ public struct SearchStationReducer: ReducerProtocol {
                         let stations = try await favoritesService.loadFavorites()
                         await send(.loadSavedStations(stations))
                     } catch: { error, _ in
-                        log.error("Failed to retrieve saved stations: \(error)")
+                        log.error(error, "Failed to retrieve saved stations")
                     }
                 )
                 
@@ -149,9 +149,7 @@ public struct SearchStationReducer: ReducerProtocol {
                 return .run { [favorites = state.favoriteStations] _ in
                     try await favoritesService.saveFavorites(favorites)
                 } catch: { [favorites = state.favoriteStations] error, _ in
-                    log.error(
-                        ".toggleSaveStation: Coud not save favorites=\(favorites), error=\(error)"
-                    )
+                    log.error(error, ".toggleSaveStation: Coud not save favorites=\(favorites)")
                 }
             
             case let .moveFavorite(from: from, to: to):
@@ -159,9 +157,7 @@ public struct SearchStationReducer: ReducerProtocol {
                 return .run { [favorites = state.favoriteStations] _ in
                     try await favoritesService.saveFavorites(favorites)
                 } catch: { [favorites = state.favoriteStations] error, _ in
-                    log.error(
-                        ".moveFavorite: Could not save favorites=\(favorites), error=\(error)"
-                    )
+                    log.error(error, ".moveFavorite: Could not save favorites=\(favorites)")
                 }
                 
             case .askForLocationPersmission:

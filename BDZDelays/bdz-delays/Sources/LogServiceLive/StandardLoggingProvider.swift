@@ -15,8 +15,8 @@ struct StandardLoggingProvider: LogProvider {
         switch level {
         case .info:
             Self.logger.info("\(message)", source: source)
-        case .error:
-            Self.logger.error("\(message)", source: source)
+        case .error(let error):
+            Self.logger.error("\(message); error=\(error)", source: source)
         }
     }
 }

@@ -10,6 +10,7 @@
 		74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74B48B632A11887D0061DD98 /* FavoritesServiceLive */; };
 		74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */; };
 		74FB4A692A13FAE000FD7290 /* LogServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74FB4A682A13FAE000FD7290 /* LogServiceLive */; };
+		74FB4A6F2A15856B00FD7290 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */; };
 		A0541FE52A08FD8E0077A164 /* SearchStationView in Frameworks */ = {isa = PBXBuildFile; productRef = A0541FE42A08FD8E0077A164 /* SearchStationView */; };
 		A0541FE72A08FDA30077A164 /* SearchStationDomain in Frameworks */ = {isa = PBXBuildFile; productRef = A0541FE62A08FDA30077A164 /* SearchStationDomain */; };
 		A0541FE92A09153F0077A164 /* LocationServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = A0541FE82A09153F0077A164 /* LocationServiceLive */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A067207B29F31B96008A4D15 /* BDZDelays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BDZDelays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDZDelaysApp.swift; sourceTree = "<group>"; };
 		A067208229F31B97008A4D15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				A08CED732A08EEDB00578D75 /* bdz-delays */,
 				A067208429F31B97008A4D15 /* BDZDelays.entitlements */,
 				A067208229F31B97008A4D15 /* Assets.xcassets */,
+				74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */,
 				A067208529F31B97008A4D15 /* Preview Content */,
 			);
 			path = BDZDelays;
@@ -103,6 +106,7 @@
 				A067207729F31B96008A4D15 /* Sources */,
 				A067207829F31B96008A4D15 /* Frameworks */,
 				A067207929F31B96008A4D15 /* Resources */,
+				74FB4A6A2A15731300FD7290 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -163,12 +167,35 @@
 			buildActionMask = 2147483647;
 			files = (
 				A067208729F31B97008A4D15 /* Preview Assets.xcassets in Resources */,
+				74FB4A6F2A15856B00FD7290 /* GoogleService-Info.plist in Resources */,
 				A0C57B9A2A0AF0F100E15CD8 /* Settings.bundle in Resources */,
 				A067208329F31B97008A4D15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		74FB4A6A2A15731300FD7290 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${BUILD_DIR%Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A067207729F31B96008A4D15 /* Sources */ = {
@@ -299,6 +326,7 @@
 				CODE_SIGN_ENTITLEMENTS = BDZDelays/BDZDelays.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"BDZDelays/Preview Content\"";
 				DEVELOPMENT_TEAM = 4643PTS49B;
 				ENABLE_HARDENED_RUNTIME = YES;

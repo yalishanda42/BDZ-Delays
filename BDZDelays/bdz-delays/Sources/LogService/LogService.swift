@@ -9,9 +9,9 @@ public protocol LogProvider {
 }
 
 public struct LogService {
-    public enum Level: Equatable {
+    public enum Level {
         case info
-        case error
+        case error(Error)
     }
     
     let providers: [LogProvider]
@@ -30,12 +30,13 @@ public struct LogService {
     }
     
     public func error(
+        _ error: Error,
         _ message: String,
         file: String = #file,
         function: String = #function,
         line: UInt = #line
     ) {
-        log(.error, message, file: file, function: function, line: line)
+        log(.error(error), message, file: file, function: function, line: line)
     }
     
     internal func log(

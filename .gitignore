@@ -111,3 +111,6 @@ xcuserdata
 
 # fastlane
 BDZDelays/bdz-delays/fastlane/*
+
+# Firebase
+**/GoogleService-Info.plist
