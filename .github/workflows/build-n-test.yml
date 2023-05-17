@@ -23,6 +23,10 @@ jobs:
       - name: Switch to Xcode 14.3
         run: |
           sudo xcode-select -s /Applications/Xcode_14.3.app
+
+      - name: Decode GoogleService-Info.plist
+        run: |
+          echo ${{ secrets.GOOGLE_PLIST_CONTENT_B64 }} | base64 --decode > "${GITHUB_WORKSPACE}/BDZDelays/GoogleService-Info.plist"
           
       - name: Build iOS app (debug config)
         run: |
@@ -43,6 +47,10 @@ jobs:
       - name: Switch to Xcode 14.3
         run: |
           sudo xcode-select -s /Applications/Xcode_14.3.app
+
+      - name: Decode GoogleService-Info.plist
+        run: |
+          echo ${{ secrets.GOOGLE_PLIST_CONTENT_B64 }} | base64 --decode > "${GITHUB_WORKSPACE}/BDZDelays/GoogleService-Info.plist"
           
       - name: Build macOS app (debug config)
         run: |
