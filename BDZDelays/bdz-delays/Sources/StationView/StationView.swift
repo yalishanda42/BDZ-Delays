@@ -110,37 +110,37 @@ fileprivate extension TrainAtStation {
             to: to.name,
             operation: movement.asOperationState,
             arrival: arrivalDisplayTime,
-            departure: departureDisplayTime
+            departure: departureDisplayTime,
+            delayInMinutes: delay?.minutes
         )
     }
     
-    var arrivalDisplayTime: TrainViewModel.DisplayTime? {
+    var arrivalDisplayTime: TrainViewModel.Schedule? {
         switch schedule {
         case .arrivalOnly(let arrival),
                 .full(arrival: let arrival, departure: _):
-            return displayTimeFrom(arrival)
+            return scheduleFrom(arrival)
         default:
             return nil
         }
     }
     
-    var departureDisplayTime: TrainViewModel.DisplayTime? {
+    var departureDisplayTime: TrainViewModel.Schedule? {
         switch schedule {
         case .departureOnly(let departure),
                 .full(arrival: _, departure: let departure):
-            return displayTimeFrom(departure)
+            return scheduleFrom(departure)
         default:
             return nil
         }
     }
     
-    func displayTimeFrom(_ scheduled: Date) -> TrainViewModel.DisplayTime {
+    func scheduleFrom(_ scheduled: Date) -> TrainViewModel.Schedule {
         .init(
-            scheduled: scheduled.hoursAndMinutes,
-            delay: delay.map { TrainViewModel.Delay(
-                minutes: $0.minutes,
-                estimate: scheduled.addingDuration($0).hoursAndMinutes
-            )}
+            scheduled.hoursAndMinutes,
+            actual: delay.map {
+                scheduled.addingDuration($0).hoursAndMinutes
+            }
         )
     }
 }

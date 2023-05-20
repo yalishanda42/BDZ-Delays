@@ -16,8 +16,10 @@ public struct TrainViewModel: Identifiable {
     
     public let operation: OperationState
     
-    public let arrival: DisplayTime?
-    public let departure: DisplayTime?
+    public let arrival: Schedule?
+    public let departure: Schedule?
+    
+    public let delayInMinutes: Int?
     
     public init(
         id: String,
@@ -25,8 +27,9 @@ public struct TrainViewModel: Identifiable {
         through: String? = nil,
         to: String,
         operation: OperationState,
-        arrival: DisplayTime? = nil,
-        departure: DisplayTime? = nil
+        arrival: Schedule? = nil,
+        departure: Schedule? = nil,
+        delayInMinutes: Int? = nil
     ) {
         self.id = id
         self.from = from
@@ -35,6 +38,7 @@ public struct TrainViewModel: Identifiable {
         self.operation = operation
         self.arrival = arrival
         self.departure = departure
+        self.delayInMinutes = delayInMinutes
     }
 }
 
@@ -46,23 +50,13 @@ public extension TrainViewModel {
         case leftStationOrTerminated
     }
     
-    struct DisplayTime {
+    struct Schedule {
         let scheduled: String
-        let delay: Delay?
+        let actual: String?
         
-        public init(scheduled: String, delay: Delay? = nil) {
+        public init(_ scheduled: String, actual: String? = nil) {
             self.scheduled = scheduled
-            self.delay = delay
-        }
-    }
-    
-    struct Delay {
-        let minutes: Int
-        let estimate: String
-        
-        public init(minutes: Int, estimate: String) {
-            self.minutes = minutes
-            self.estimate = estimate
+            self.actual = actual
         }
     }
 }
