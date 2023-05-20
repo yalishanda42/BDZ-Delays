@@ -307,7 +307,7 @@ struct TrainView_Previews: PreviewProvider {
                 )
             ),
             TrainViewModel(
-                id: "БВ 32612",
+                id: "БВ 32613",
                 from: "София",
                 through: "Горна Оряховица",
                 to: "Варна",
