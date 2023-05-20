@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 
 import LocationService
+import LogService
 import ROVR
 import SharedModels
 
@@ -131,6 +132,8 @@ private struct LocationManagerActor {
 extension LocationManagerActor {
     class ManagerDelegate: NSObject, CLLocationManagerDelegate {
         
+        @Dependency(\.log) private var log
+        
         private(set) var status: CLAuthorizationStatus {
             didSet {
                 guard oldValue != status else { return }
@@ -161,10 +164,12 @@ extension LocationManagerActor {
         }
             
         func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
+            log.info("locationManager didVisit cordinate:\(visit.coordinate)")
             location = visit.coordinate
         }
         
         func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+            log.info("locationManager didChangeAuthorization:\(manager.authorizationStatus)")
             status = manager.authorizationStatus
         }
     }

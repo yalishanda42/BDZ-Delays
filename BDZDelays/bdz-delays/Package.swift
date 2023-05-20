@@ -170,6 +170,7 @@ let package = Package(
                 "LocationService",
                 "SharedModels",
                 "ROVR",
+                "LogService",
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),
