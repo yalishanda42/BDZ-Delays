@@ -44,7 +44,7 @@ public struct TrainView: View {
     @ViewBuilder
     private var header: some View {
         ZStack {
-            headerColor.opacity(0.69)
+            headerColor
             
             VStack(spacing: 0) {
                 Text(vm.id).bold()
