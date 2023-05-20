@@ -39,6 +39,7 @@ public struct TrainView: View {
             statusAdditionalText
         }
         .padding(.bottom, 6)
+        .cornerRadius(8)
     }
     
     @ViewBuilder
