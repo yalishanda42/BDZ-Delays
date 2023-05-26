@@ -115,6 +115,7 @@ final class SearchStationDomainTests: XCTestCase {
             reducer: SearchStationReducer()
         ) {
             $0.favoritesService.loadFavorites = { expected }
+            $0.locationService.statusStream = { AsyncStream { _ in /* never */ } }
         }
         
         let task = await store.send(.task)
