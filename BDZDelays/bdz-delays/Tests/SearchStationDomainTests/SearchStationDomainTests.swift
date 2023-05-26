@@ -47,10 +47,12 @@ final class SearchStationDomainTests: XCTestCase {
         await store.send(.updateQuery(query)) // no modification expected
     }
     
-    func test_askForLocation_callsService() async throws {
+    func test_locationAction_whenNotYetAsked_asksForPermisson() async throws {
         let serviceSpy = Spy()
         let store = TestStore(
-            initialState: SearchStationReducer.State(),
+            initialState: SearchStationReducer.State(
+                locationStatus: .notYetAskedForAuthorization
+            ),
             reducer: SearchStationReducer()
         ) {
             $0.locationService.requestAuthorization = {
@@ -58,9 +60,64 @@ final class SearchStationDomainTests: XCTestCase {
             }
         }
         
-        await store.send(.askForLocationPersmission) {
+        await store.send(.locationAction) {
             $0.locationStatus = .determining
         }
+        
+        let calls = await serviceSpy.calls
+        XCTAssertEqual(calls, 1)
+    }
+    
+    func test_locationAction_whenAvailable_opensStationInfo() async throws {
+        let station = BGStation.dobrich
+        let store = TestStore(
+            initialState: SearchStationReducer.State(
+                locationStatus: .authorized(nearestStation: station)
+            ),
+            reducer: SearchStationReducer()
+        )
+        
+        store.exhaustivity = .off
+        
+        await store.send(.locationAction)
+        await store.receive(.selectStation(station))
+    }
+    
+    func test_locationAction_whenConnectionFailed_refreshes() async throws {
+        let serviceSpy = Spy()
+        let store = TestStore(
+            initialState: SearchStationReducer.State(
+                locationStatus: .authorized(nearestStation: nil)
+            ),
+            reducer: SearchStationReducer()
+        ) {
+            $0.locationService.manuallyRefreshStatus = {
+                await serviceSpy.call()
+            }
+        }
+        
+        await store.send(.locationAction) {
+            $0.locationStatus = .determining
+        }
+        
+        let calls = await serviceSpy.calls
+        XCTAssertEqual(calls, 1)
+    }
+    
+    func test_locationAction_whenDenied_showsSettings() async throws {
+        let serviceSpy = Spy()
+        let store = TestStore(
+            initialState: SearchStationReducer.State(
+                locationStatus: .denied
+            ),
+            reducer: SearchStationReducer()
+        ) {
+            $0.settingsService.openSettings = {
+                await serviceSpy.call()
+            }
+        }
+        
+        await store.send(.locationAction)
         
         let calls = await serviceSpy.calls
         XCTAssertEqual(calls, 1)

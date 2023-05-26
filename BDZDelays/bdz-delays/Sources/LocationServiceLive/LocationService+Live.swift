@@ -66,6 +66,9 @@ extension LocationService: DependencyKey {
             },
             requestAuthorization: {
                 await LocationManagerActor.shared.requestAuth()
+            },
+            manuallyRefreshStatus: {
+                await LocationManagerActor.shared.refresh()
             }
         )
     }()
@@ -126,6 +129,14 @@ private struct LocationManagerActor {
     func requestAuth() {
         guard case .notDetermined = manager.authorizationStatus else { return }
         manager.requestWhenInUseAuthorization()
+    }
+    
+    func refresh() {
+        let location = authorizedStatuses.contains(manager.authorizationStatus)
+            ? manager.location?.coordinate
+            : nil
+        
+        delegate.onLocationUpdate?(location)
     }
 }
 

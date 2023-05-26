@@ -130,7 +130,7 @@ private struct NearestStationView: View {
                 Image(systemName: "location.fill")
                     .foregroundColor(.accentColor)
                 Button {
-                    vs.send(.selectStation(station))
+                    vs.send(.locationAction)
                 } label: {
                     Text(station.name)
                 }.favoritable(station: station, vs: vs)
@@ -138,7 +138,7 @@ private struct NearestStationView: View {
                 Image(systemName: "location")
                     .foregroundColor(.accentColor)
                 Button {
-                    vs.send(.askForLocationPersmission)
+                    vs.send(.locationAction)
                 } label: {
                     Text("Позволи достъп до локацията")
                 }
@@ -146,7 +146,7 @@ private struct NearestStationView: View {
                 Image(systemName: "location")
                     .foregroundColor(.red)
                 Button {
-                    vs.send(.locationSettings)
+                    vs.send(.locationAction)
                 } label: {
                     Text("Достъпът до локацията е отказан")
                 }
@@ -159,8 +159,12 @@ private struct NearestStationView: View {
             case .authorized(nearestStation: .none):
                 Image(systemName: "wifi.exclamationmark")
                     .foregroundColor(.gray)
-                Text("Неуспех при опит за връзка")
-                    .foregroundColor(.gray)
+                Button {
+                    vs.send(.locationAction)
+                } label: {
+                    Text("Неуспех при опит за връзка")
+                        .foregroundColor(.gray)
+                }
             case .unableToUseLocation:
                 EmptyView()
             }

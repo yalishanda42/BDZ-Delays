@@ -13,7 +13,8 @@ import Dependencies
 extension LocationService: TestDependencyKey {
     public static var testValue = Self(
         statusStream: unimplemented("LocationService.statusStream"),
-        requestAuthorization: unimplemented("LocationService.requestAuthorization")
+        requestAuthorization: unimplemented("LocationService.requestAuthorization"),
+        manuallyRefreshStatus: unimplemented("LocationService.manuallyRefreshStatus")
     )
     
     public static let previewValue: Self = {
@@ -27,6 +28,9 @@ extension LocationService: TestDependencyKey {
             },
             requestAuthorization: {
                 continuation?.yield(.authorized(nearestStation: .dobrich))
+            },
+            manuallyRefreshStatus: {
+                continuation?.yield(.authorized(nearestStation: .varna))
             }
         )
     }()

@@ -66,8 +66,7 @@ public struct SearchStationReducer: ReducerProtocol {
         case moveFavorite(from: IndexSet, to: Int)
         
         case locationStatusUpdate(LocationStatus)
-        case askForLocationPersmission
-        case locationSettings
+        case locationAction
         
         /// To be send from the `.task` view modifier.
         /// Used for executing a long-running effect for
@@ -134,11 +133,11 @@ public struct SearchStationReducer: ReducerProtocol {
                 
                 state.stationState = .init(station: new)
                 return .send(.stationAction(.refresh))
-            
+                
             case .loadSavedStations(let statons):
                 state.favoriteStations = statons
                 return .none
-            
+                
             case .toggleSaveStation(let station):
                 if state.isStationFavorite(station) {
                     state.favoriteStations.removeAll { $0 == station }
@@ -151,7 +150,7 @@ public struct SearchStationReducer: ReducerProtocol {
                 } catch: { [favorites = state.favoriteStations] error, _ in
                     log.error(error, ".toggleSaveStation: Coud not save favorites=\(favorites)")
                 }
-            
+                
             case let .moveFavorite(from: from, to: to):
                 state.favoriteStations.move(fromOffsets: from, toOffset: to)
                 return .run { [favorites = state.favoriteStations] _ in
@@ -160,15 +159,26 @@ public struct SearchStationReducer: ReducerProtocol {
                     log.error(error, ".moveFavorite: Could not save favorites=\(favorites)")
                 }
                 
-            case .askForLocationPersmission:
-                state.locationStatus = .determining
-                return .fireAndForget {
-                    await locationService.requestAuthorization()
-                }
-                
-            case .locationSettings:
-                return .fireAndForget {
-                    await settingsService.openSettings()
+            case .locationAction:
+                switch state.locationStatus {
+                case .notYetAskedForAuthorization:
+                    state.locationStatus = .determining
+                    return .fireAndForget {
+                        await locationService.requestAuthorization()
+                    }
+                case .denied:
+                    return .fireAndForget {
+                        await settingsService.openSettings()
+                    }
+                case .authorized(nearestStation: .some(let station)):
+                    return .send(.selectStation(station))
+                case .authorized(nearestStation: .none):
+                    state.locationStatus = .determining
+                    return .fireAndForget {
+                        await locationService.manuallyRefreshStatus()
+                    }
+                case .determining, .unableToUseLocation:
+                    return .none
                 }
                 
             case .stationAction(let childAction):
