@@ -67,7 +67,11 @@ public struct StationReducer: ReducerProtocol {
             }
             
         case .tick:
-            // Refresh on every new calendar minute.
+            // Auto-refresh only on every new calendar minute and if not errored.
+            guard state.loadingState != .failed else {
+                return .none
+            }
+            
             let isInTheSameMinute = state.lastUpdateTime
                 .map {
                     let components: Set<Calendar.Component> = [.day, .hour, .minute]
@@ -92,7 +96,7 @@ public struct StationReducer: ReducerProtocol {
                 await .receive(TaskResult {
                     try await stationRepository.fetchTrainsAtStation(station)
                 })
-            }
+            }.cancellable(id: TrainsTaskCancelID.self)
             
         case .receive(.success(let trains)):
             state.lastUpdateTime = now

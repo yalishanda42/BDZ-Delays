@@ -131,6 +131,146 @@ final class StationDomainTests: XCTestCase {
             $0.lastUpdateTime = Date(timeIntervalSinceReferenceDate: 1)
         }
     }
+    
+    func test_task_sendsTickEverySecond() async throws {
+        let clock = TestClock()
+        let store = TestStore(
+            initialState: .init(
+                station: .sofia
+            ),
+            reducer: StationReducer()
+        ) {
+            $0.continuousClock = clock
+        }
+        
+        store.exhaustivity = .off
+        
+        let task = await store.send(.task)
+        
+        for _ in 1...10 {
+            await clock.advance(by: .seconds(1))
+            await store.receive(.tick)
+        }
+        
+        await task.cancel()  // done by SwiftUI
+    }
+    
+    func test_tick_refreshesWhenInDifferrentMinute() async throws {
+        let dateInNextMinute = Date(timeIntervalSinceReferenceDate: 61)
+        
+        let store = TestStore(
+            initialState: .init(
+                station: .sofia,
+                lastUpdateTime: Date(timeIntervalSinceReferenceDate: 51)
+            ),
+            reducer: StationReducer()
+        ) {
+            $0.date.now = dateInNextMinute
+            $0.calendar = Calendar(identifier: .gregorian)
+            $0.stationRepository.fetchTrainsAtStation = { _ in [] }
+        }
+        
+        await store.send(.tick)
+        
+        await store.receive(.refresh) {
+            $0.loadingState = .loading
+        }
+        
+        await store.receive(.receive(.success([]))) {
+            $0.trains = []
+            $0.lastUpdateTime = dateInNextMinute
+            $0.loadingState = .loaded
+        }
+    }
+    
+    func test_tick_doesNotRefreshWhenInSameMinute() async throws {
+        let store = TestStore(
+            initialState: .init(
+                station: .sofia,
+                lastUpdateTime: Date(timeIntervalSinceReferenceDate: 51)
+            ),
+            reducer: StationReducer()
+        ) {
+            $0.date.now = Date(timeIntervalSinceReferenceDate: 52)
+            $0.calendar = Calendar(identifier: .gregorian)
+            $0.stationRepository.fetchTrainsAtStation = { _ in [] }
+        }
+        
+        await store.send(.tick)
+    }
+    
+    func test_tick_refreshesWhenNoPreviousUpdateTime() async throws {
+        let dateInNextMinute = Date(timeIntervalSinceReferenceDate: 61)
+        
+        let store = TestStore(
+            initialState: .init(
+                station: .sofia,
+                lastUpdateTime: nil
+            ),
+            reducer: StationReducer()
+        ) {
+            $0.date.now = dateInNextMinute
+            $0.calendar = Calendar(identifier: .gregorian)
+            $0.stationRepository.fetchTrainsAtStation = { _ in [] }
+        }
+        
+        await store.send(.tick)
+        
+        await store.receive(.refresh) {
+            $0.loadingState = .loading
+        }
+        
+        await store.receive(.receive(.success([]))) {
+            $0.trains = []
+            $0.lastUpdateTime = dateInNextMinute
+            $0.loadingState = .loaded
+        }
+    }
+    
+    func test_tick_doesNotRefreshWhenErrored() async throws {
+        let dateInNextMinute = Date(timeIntervalSinceReferenceDate: 61)
+        
+        let store = TestStore(
+            initialState: .init(
+                station: .sofia,
+                loadingState: .failed,
+                lastUpdateTime: Date(timeIntervalSinceReferenceDate: 51)
+            ),
+            reducer: StationReducer()
+        ) {
+            $0.date.now = dateInNextMinute
+            $0.calendar = Calendar(identifier: .gregorian)
+            $0.stationRepository.fetchTrainsAtStation = { _ in [] }
+        }
+        
+        await store.send(.tick)
+    }
+    
+    func test_finalize_cancelsEffects() async throws {
+        let clock = TestClock()
+
+        let store = TestStore(
+            initialState: .init(station: .sofia),
+            reducer: StationReducer()
+        ) {
+            $0.stationRepository = StationRepository(
+                fetchTrainsAtStation: { _ in
+                    for await _ in clock.timer(interval: .seconds(1)) {
+                        return []
+                    }
+                    return []
+                }
+            )
+        }
+
+        await store.send(.refresh) {
+            $0.loadingState = .loading
+        }
+        
+        // do not advance clock so that the task is still in flight
+        
+        await store.send(.finalize)
+    }
 }
 
 // MARK: - Helpers
