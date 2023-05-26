@@ -31,6 +31,14 @@ Build the iOS app in debug configuration for iOS 16.4
 
 Run all tests
 
+### ios testflight
+
+```sh
+[bundle exec] fastlane ios testflight
+```
+
+Upload to Testfllght
+
 ----
 
 

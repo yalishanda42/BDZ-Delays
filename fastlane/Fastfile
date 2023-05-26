@@ -47,6 +47,22 @@ platform :ios do
       )
     end
   end
+
+  desc "Upload to Testfllght"
+  lane :testflight do
+    build_app(
+      project: "BDZDelays.xcodeproj",
+      scheme: "BDZDelays",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "yalishanda.BDZDelays" => "iOS Distribution"
+        }
+      },
+      sdk: "iphoneos16.4"
+    )
+    upload_to_testflight
+  end
 end
 
 platform :mac do
