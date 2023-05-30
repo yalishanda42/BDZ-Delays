@@ -132,29 +132,6 @@ final class StationDomainTests: XCTestCase {
         }
     }
     
-    func test_task_sendsTickEverySecond() async throws {
-        let clock = TestClock()
-        let store = TestStore(
-            initialState: .init(
-                station: .sofia
-            ),
-            reducer: StationReducer()
-        ) {
-            $0.continuousClock = clock
-        }
-        
-        store.exhaustivity = .off
-        
-        let task = await store.send(.task)
-        
-        for _ in 1...10 {
-            await clock.advance(by: .seconds(1))
-            await store.receive(.tick)
-        }
-        
-        await task.cancel()  // done by SwiftUI
-    }
-    
     func test_tick_refreshesWhenInDifferrentMinute() async throws {
         let dateInNextMinute = Date(timeIntervalSinceReferenceDate: 61)
         

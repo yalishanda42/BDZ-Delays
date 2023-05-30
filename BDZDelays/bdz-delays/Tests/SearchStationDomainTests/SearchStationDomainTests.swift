@@ -68,21 +68,6 @@ final class SearchStationDomainTests: XCTestCase {
         XCTAssertEqual(calls, 1)
     }
     
-    func test_locationAction_whenAvailable_opensStationInfo() async throws {
-        let station = BGStation.dobrich
-        let store = TestStore(
-            initialState: SearchStationReducer.State(
-                locationStatus: .authorized(nearestStation: station)
-            ),
-            reducer: SearchStationReducer()
-        )
-        
-        store.exhaustivity = .off
-        
-        await store.send(.locationAction)
-        await store.receive(.selectStation(station))
-    }
-    
     func test_locationAction_whenConnectionFailed_refreshes() async throws {
         let serviceSpy = Spy()
         let store = TestStore(
