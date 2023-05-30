@@ -13,25 +13,30 @@ struct Provider: IntentTimelineProvider {
     typealias Entry = SimpleEntry
     
     func placeholder(in context: Context) -> Entry {
-        Entry(date: Date(), configuration: ConfigurationIntent())
+        Entry(date: Date(), configuration: SelectStationIntent())
     }
 
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Entry) -> ()) {
+    func getSnapshot(
+        for configuration: SelectStationIntent,
+        in context: Context,
+        completion: @escaping (Entry) -> ()
+    ) {
         let entry = Entry(date: Date(), configuration: configuration)
         completion(entry)
     }
 
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [Entry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+    func getTimeline(
+        for configuration: SelectStationIntent,
+        in context: Context,
+        completion: @escaping (Timeline<Entry>) -> ()
+    ) {
+        let entries: [Entry] = (0 ..< 30).map {  // nxt half an hour
+            let now = Date()
+            let entryDate = Calendar.current.date(byAdding: .minute, value: $0, to: now)!
             let entry = Entry(date: entryDate, configuration: configuration)
-            entries.append(entry)
+            return entry
         }
-
+        
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
@@ -39,17 +44,17 @@ struct Provider: IntentTimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationIntent
+    let configuration: SelectStationIntent
 }
 
 struct DelaysWidget: Widget {
     let kind: String = "DelaysWidget"
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: SelectStationIntent.self, provider: Provider()) { entry in
             WidgetView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Delays Widget")
+        .description("This is the widget of the BDZ Delays app.")
     }
 }

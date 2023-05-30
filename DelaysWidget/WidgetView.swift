@@ -18,7 +18,12 @@ struct WidgetView: View {
         VStack(spacing: 1) {
             ZStack {
                 Color.teal
-                Text("Горна оряховица")
+                
+                if let station = entry.configuration.station {
+                    Text(station)
+                } else {
+                    Text("София").redacted(reason: .placeholder)
+                }
             }.frame(maxHeight: 28)
             
             ForEach(Array(1...rows), id: \.self) { _ in
@@ -62,7 +67,7 @@ struct WidgetView_Previews: PreviewProvider {
     
     static var previews: some View {
         ForEach(sizes, id: \.1) {
-            WidgetView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+            WidgetView(entry: SimpleEntry(date: Date(), configuration: SelectStationIntent()))
                 .previewContext(WidgetPreviewContext(family: $0.0))
                 .previewDisplayName($0.1)
         }

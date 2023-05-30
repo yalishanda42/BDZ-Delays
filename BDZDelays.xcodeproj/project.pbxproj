@@ -19,6 +19,11 @@
 		742E26B22A2647790009092D /* StationRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26B12A2647790009092D /* StationRepository */; };
 		742E26B42A26477E0009092D /* StationRepositoryLive in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26B32A26477E0009092D /* StationRepositoryLive */; };
 		742E26B72A26507E0009092D /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E26B62A26507E0009092D /* WidgetView.swift */; };
+		742E26C12A2666000009092D /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 742E26C02A2666000009092D /* Intents.framework */; };
+		742E26C42A2666000009092D /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E26C32A2666000009092D /* IntentHandler.swift */; };
+		742E26D92A2666010009092D /* SelectStationIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 742E26BF2A2666000009092D /* SelectStationIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		742E26E02A2666450009092D /* DelaysWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */; };
+		742E26E32A2667700009092D /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26E22A2667700009092D /* SharedModels */; };
 		74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74B48B632A11887D0061DD98 /* FavoritesServiceLive */; };
 		74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */; };
 		74FB4A692A13FAE000FD7290 /* LogServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74FB4A682A13FAE000FD7290 /* LogServiceLive */; };
@@ -41,6 +46,13 @@
 			remoteGlobalIDString = 742E26972A26013D0009092D;
 			remoteInfo = DelaysWidgetExtension;
 		};
+		742E26D72A2666010009092D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A067207329F31B96008A4D15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 742E26BE2A2666000009092D;
+			remoteInfo = SelectStationIntent;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +62,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				742E26D92A2666010009092D /* SelectStationIntent.appex in Embed Foundation Extensions */,
 				742E26AA2A26013F0009092D /* DelaysWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -67,6 +80,12 @@
 		742E26A32A26013F0009092D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		742E26A52A26013F0009092D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		742E26B62A26507E0009092D /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetView.swift; sourceTree = "<group>"; };
+		742E26BA2A2664270009092D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		742E26BF2A2666000009092D /* SelectStationIntent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SelectStationIntent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		742E26C02A2666000009092D /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
+		742E26C32A2666000009092D /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		742E26C52A2666000009092D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		742E26CB2A2666010009092D /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A067207B29F31B96008A4D15 /* BDZDelays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BDZDelays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDZDelaysApp.swift; sourceTree = "<group>"; };
@@ -87,6 +106,15 @@
 				742E26B02A26476C0009092D /* StationDomain in Frameworks */,
 				742E269A2A26013E0009092D /* WidgetKit.framework in Frameworks */,
 				742E26B22A2647790009092D /* StationRepository in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		742E26BC2A2666000009092D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742E26C12A2666000009092D /* Intents.framework in Frameworks */,
+				742E26E32A2667700009092D /* SharedModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,11 +148,22 @@
 			path = DelaysWidget;
 			sourceTree = "<group>";
 		};
+		742E26C22A2666000009092D /* SelectStationIntent */ = {
+			isa = PBXGroup;
+			children = (
+				742E26C32A2666000009092D /* IntentHandler.swift */,
+				742E26C52A2666000009092D /* Info.plist */,
+			);
+			path = SelectStationIntent;
+			sourceTree = "<group>";
+		};
 		A0541FE32A08FD8E0077A164 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				742E26992A26013D0009092D /* WidgetKit.framework */,
 				742E269B2A26013E0009092D /* SwiftUI.framework */,
+				742E26C02A2666000009092D /* Intents.framework */,
+				742E26CB2A2666010009092D /* IntentsUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -134,6 +173,7 @@
 			children = (
 				A067207D29F31B96008A4D15 /* BDZDelays */,
 				742E269D2A26013E0009092D /* DelaysWidget */,
+				742E26C22A2666000009092D /* SelectStationIntent */,
 				A0C57B992A0AF0F100E15CD8 /* Settings.bundle */,
 				A067207C29F31B96008A4D15 /* Products */,
 				A0541FE32A08FD8E0077A164 /* Frameworks */,
@@ -145,6 +185,7 @@
 			children = (
 				A067207B29F31B96008A4D15 /* BDZDelays.app */,
 				742E26982A26013D0009092D /* DelaysWidgetExtension.appex */,
+				742E26BF2A2666000009092D /* SelectStationIntent.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,6 +193,7 @@
 		A067207D29F31B96008A4D15 /* BDZDelays */ = {
 			isa = PBXGroup;
 			children = (
+				742E26BA2A2664270009092D /* Info.plist */,
 				A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */,
 				A08CED732A08EEDB00578D75 /* bdz-delays */,
 				A067208429F31B97008A4D15 /* BDZDelays.entitlements */,
@@ -195,6 +237,26 @@
 			productReference = 742E26982A26013D0009092D /* DelaysWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		742E26BE2A2666000009092D /* SelectStationIntent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 742E26DD2A2666010009092D /* Build configuration list for PBXNativeTarget "SelectStationIntent" */;
+			buildPhases = (
+				742E26BB2A2666000009092D /* Sources */,
+				742E26BC2A2666000009092D /* Frameworks */,
+				742E26BD2A2666000009092D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SelectStationIntent;
+			packageProductDependencies = (
+				742E26E22A2667700009092D /* SharedModels */,
+			);
+			productName = SelectStationIntent;
+			productReference = 742E26BF2A2666000009092D /* SelectStationIntent.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A067207A29F31B96008A4D15 /* BDZDelays */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A06720A029F31B97008A4D15 /* Build configuration list for PBXNativeTarget "BDZDelays" */;
@@ -209,6 +271,7 @@
 			);
 			dependencies = (
 				742E26A92A26013F0009092D /* PBXTargetDependency */,
+				742E26D82A2666010009092D /* PBXTargetDependency */,
 			);
 			name = BDZDelays;
 			packageProductDependencies = (
@@ -237,6 +300,9 @@
 					742E26972A26013D0009092D = {
 						CreatedOnToolsVersion = 14.3;
 					};
+					742E26BE2A2666000009092D = {
+						CreatedOnToolsVersion = 14.3;
+					};
 					A067207A29F31B96008A4D15 = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -259,6 +325,7 @@
 			targets = (
 				A067207A29F31B96008A4D15 /* BDZDelays */,
 				742E26972A26013D0009092D /* DelaysWidgetExtension */,
+				742E26BE2A2666000009092D /* SelectStationIntent */,
 			);
 		};
 /* End PBXProject section */
@@ -269,6 +336,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				742E26A42A26013F0009092D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		742E26BD2A2666000009092D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +393,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		742E26BB2A2666000009092D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742E26E02A2666450009092D /* DelaysWidget.intentdefinition in Sources */,
+				742E26C42A2666000009092D /* IntentHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A067207729F31B96008A4D15 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -335,6 +418,11 @@
 			isa = PBXTargetDependency;
 			target = 742E26972A26013D0009092D /* DelaysWidgetExtension */;
 			targetProxy = 742E26A82A26013F0009092D /* PBXContainerItemProxy */;
+		};
+		742E26D82A2666010009092D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 742E26BE2A2666000009092D /* SelectStationIntent */;
+			targetProxy = 742E26D72A2666010009092D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -393,6 +481,61 @@
 				PRODUCT_BUNDLE_IDENTIFIER = yalishanda.BDZDelays.DelaysWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		742E26DE2A2666010009092D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4643PTS49B;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SelectStationIntent/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SelectStationIntent;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = yalishanda.BDZDelays.SelectStationIntent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		742E26DF2A2666010009092D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4643PTS49B;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SelectStationIntent/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SelectStationIntent;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = yalishanda.BDZDelays.SelectStationIntent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -529,6 +672,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BDZDelays/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Закъснения";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "За да открие коя е най-близката ЖП гара.";
@@ -578,6 +722,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BDZDelays/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Закъснения";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "За да открие коя е най-близката ЖП гара.";
@@ -621,6 +766,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		742E26DD2A2666010009092D /* Build configuration list for PBXNativeTarget "SelectStationIntent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				742E26DE2A2666010009092D /* Debug */,
+				742E26DF2A2666010009092D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A067207629F31B96008A4D15 /* Build configuration list for PBXProject "BDZDelays" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -653,6 +807,10 @@
 		742E26B32A26477E0009092D /* StationRepositoryLive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = StationRepositoryLive;
+		};
+		742E26E22A2667700009092D /* SharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedModels;
 		};
 		74B48B632A11887D0061DD98 /* FavoritesServiceLive */ = {
 			isa = XCSwiftPackageProductDependency;
