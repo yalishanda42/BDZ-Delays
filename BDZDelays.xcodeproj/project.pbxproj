@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		742E269A2A26013E0009092D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 742E26992A26013D0009092D /* WidgetKit.framework */; };
+		742E269C2A26013E0009092D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 742E269B2A26013E0009092D /* SwiftUI.framework */; };
+		742E269F2A26013E0009092D /* DelaysWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E269E2A26013E0009092D /* DelaysWidgetBundle.swift */; };
+		742E26A12A26013E0009092D /* DelaysWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A02A26013E0009092D /* DelaysWidget.swift */; };
+		742E26A42A26013F0009092D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742E26A32A26013F0009092D /* Assets.xcassets */; };
+		742E26A62A26013F0009092D /* DelaysWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */; };
+		742E26A72A26013F0009092D /* DelaysWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */; };
+		742E26AA2A26013F0009092D /* DelaysWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 742E26982A26013D0009092D /* DelaysWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		742E26B02A26476C0009092D /* StationDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26AF2A26476C0009092D /* StationDomain */; };
+		742E26B22A2647790009092D /* StationRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26B12A2647790009092D /* StationRepository */; };
+		742E26B42A26477E0009092D /* StationRepositoryLive in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26B32A26477E0009092D /* StationRepositoryLive */; };
+		742E26B72A26507E0009092D /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E26B62A26507E0009092D /* WidgetView.swift */; };
 		74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74B48B632A11887D0061DD98 /* FavoritesServiceLive */; };
 		74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */; };
 		74FB4A692A13FAE000FD7290 /* LogServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74FB4A682A13FAE000FD7290 /* LogServiceLive */; };
@@ -21,7 +33,40 @@
 		A0C57B9A2A0AF0F100E15CD8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0C57B992A0AF0F100E15CD8 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		742E26A82A26013F0009092D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A067207329F31B96008A4D15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 742E26972A26013D0009092D;
+			remoteInfo = DelaysWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		742E26AB2A2601400009092D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				742E26AA2A26013F0009092D /* DelaysWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		742E26982A26013D0009092D /* DelaysWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DelaysWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		742E26992A26013D0009092D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		742E269B2A26013E0009092D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		742E269E2A26013E0009092D /* DelaysWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelaysWidgetBundle.swift; sourceTree = "<group>"; };
+		742E26A02A26013E0009092D /* DelaysWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelaysWidget.swift; sourceTree = "<group>"; };
+		742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = DelaysWidget.intentdefinition; sourceTree = "<group>"; };
+		742E26A32A26013F0009092D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		742E26A52A26013F0009092D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		742E26B62A26507E0009092D /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetView.swift; sourceTree = "<group>"; };
 		74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A067207B29F31B96008A4D15 /* BDZDelays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BDZDelays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDZDelaysApp.swift; sourceTree = "<group>"; };
@@ -33,6 +78,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		742E26952A26013D0009092D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742E269C2A26013E0009092D /* SwiftUI.framework in Frameworks */,
+				742E26B42A26477E0009092D /* StationRepositoryLive in Frameworks */,
+				742E26B02A26476C0009092D /* StationDomain in Frameworks */,
+				742E269A2A26013E0009092D /* WidgetKit.framework in Frameworks */,
+				742E26B22A2647790009092D /* StationRepository in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A067207829F31B96008A4D15 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -50,9 +107,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		742E269D2A26013E0009092D /* DelaysWidget */ = {
+			isa = PBXGroup;
+			children = (
+				742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */,
+				742E269E2A26013E0009092D /* DelaysWidgetBundle.swift */,
+				742E26A02A26013E0009092D /* DelaysWidget.swift */,
+				742E26B62A26507E0009092D /* WidgetView.swift */,
+				742E26A32A26013F0009092D /* Assets.xcassets */,
+				742E26A52A26013F0009092D /* Info.plist */,
+			);
+			path = DelaysWidget;
+			sourceTree = "<group>";
+		};
 		A0541FE32A08FD8E0077A164 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				742E26992A26013D0009092D /* WidgetKit.framework */,
+				742E269B2A26013E0009092D /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -61,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				A067207D29F31B96008A4D15 /* BDZDelays */,
+				742E269D2A26013E0009092D /* DelaysWidget */,
 				A0C57B992A0AF0F100E15CD8 /* Settings.bundle */,
 				A067207C29F31B96008A4D15 /* Products */,
 				A0541FE32A08FD8E0077A164 /* Frameworks */,
@@ -71,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				A067207B29F31B96008A4D15 /* BDZDelays.app */,
+				742E26982A26013D0009092D /* DelaysWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -99,6 +173,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		742E26972A26013D0009092D /* DelaysWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 742E26AE2A2601400009092D /* Build configuration list for PBXNativeTarget "DelaysWidgetExtension" */;
+			buildPhases = (
+				742E26942A26013D0009092D /* Sources */,
+				742E26952A26013D0009092D /* Frameworks */,
+				742E26962A26013D0009092D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DelaysWidgetExtension;
+			packageProductDependencies = (
+				742E26AF2A26476C0009092D /* StationDomain */,
+				742E26B12A2647790009092D /* StationRepository */,
+				742E26B32A26477E0009092D /* StationRepositoryLive */,
+			);
+			productName = DelaysWidgetExtension;
+			productReference = 742E26982A26013D0009092D /* DelaysWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A067207A29F31B96008A4D15 /* BDZDelays */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A06720A029F31B97008A4D15 /* Build configuration list for PBXNativeTarget "BDZDelays" */;
@@ -107,10 +203,12 @@
 				A067207829F31B96008A4D15 /* Frameworks */,
 				A067207929F31B96008A4D15 /* Resources */,
 				74FB4A6A2A15731300FD7290 /* ShellScript */,
+				742E26AB2A2601400009092D /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				742E26A92A26013F0009092D /* PBXTargetDependency */,
 			);
 			name = BDZDelays;
 			packageProductDependencies = (
@@ -133,9 +231,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					742E26972A26013D0009092D = {
+						CreatedOnToolsVersion = 14.3;
+					};
 					A067207A29F31B96008A4D15 = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -157,11 +258,20 @@
 			projectRoot = "";
 			targets = (
 				A067207A29F31B96008A4D15 /* BDZDelays */,
+				742E26972A26013D0009092D /* DelaysWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		742E26962A26013D0009092D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742E26A42A26013F0009092D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A067207929F31B96008A4D15 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -198,17 +308,100 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		742E26942A26013D0009092D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742E26A62A26013F0009092D /* DelaysWidget.intentdefinition in Sources */,
+				742E26B72A26507E0009092D /* WidgetView.swift in Sources */,
+				742E269F2A26013E0009092D /* DelaysWidgetBundle.swift in Sources */,
+				742E26A12A26013E0009092D /* DelaysWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A067207729F31B96008A4D15 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				742E26A72A26013F0009092D /* DelaysWidget.intentdefinition in Sources */,
 				A067207F29F31B96008A4D15 /* BDZDelaysApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		742E26A92A26013F0009092D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 742E26972A26013D0009092D /* DelaysWidgetExtension */;
+			targetProxy = 742E26A82A26013F0009092D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		742E26AC2A2601400009092D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4643PTS49B;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DelaysWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DelaysWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = yalishanda.BDZDelays.DelaysWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		742E26AD2A2601400009092D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4643PTS49B;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DelaysWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DelaysWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = yalishanda.BDZDelays.DelaysWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		A067209E29F31B97008A4D15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -321,6 +514,7 @@
 		A06720A129F31B97008A4D15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BDZDelays/BDZDelays.entitlements;
@@ -369,6 +563,7 @@
 		A06720A229F31B97008A4D15 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BDZDelays/BDZDelays.entitlements;
@@ -417,6 +612,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		742E26AE2A2601400009092D /* Build configuration list for PBXNativeTarget "DelaysWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				742E26AC2A2601400009092D /* Debug */,
+				742E26AD2A2601400009092D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A067207629F31B96008A4D15 /* Build configuration list for PBXProject "BDZDelays" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -438,6 +642,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		742E26AF2A26476C0009092D /* StationDomain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StationDomain;
+		};
+		742E26B12A2647790009092D /* StationRepository */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StationRepository;
+		};
+		742E26B32A26477E0009092D /* StationRepositoryLive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StationRepositoryLive;
+		};
 		74B48B632A11887D0061DD98 /* FavoritesServiceLive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FavoritesServiceLive;
