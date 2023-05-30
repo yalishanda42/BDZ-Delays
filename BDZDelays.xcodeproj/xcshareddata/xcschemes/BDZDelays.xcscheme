@@ -7,7 +7,7 @@
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "YES"
+            buildForTesting = "NO"
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
@@ -28,6 +28,36 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ROVRTests"
+               BuildableName = "ROVRTests"
+               BlueprintName = "ROVRTests"
+               ReferencedContainer = "container:BDZDelays/bdz-delays">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SearchStationDomainTests"
+               BuildableName = "SearchStationDomainTests"
+               BlueprintName = "SearchStationDomainTests"
+               ReferencedContainer = "container:BDZDelays/bdz-delays">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "StationDomainTests"
+               BuildableName = "StationDomainTests"
+               BlueprintName = "StationDomainTests"
+               ReferencedContainer = "container:BDZDelays/bdz-delays">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
