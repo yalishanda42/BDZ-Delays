@@ -15,7 +15,6 @@
 		742E26A62A26013F0009092D /* DelaysWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */; };
 		742E26A72A26013F0009092D /* DelaysWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */; };
 		742E26AA2A26013F0009092D /* DelaysWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 742E26982A26013D0009092D /* DelaysWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		742E26B02A26476C0009092D /* StationDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26AF2A26476C0009092D /* StationDomain */; };
 		742E26B22A2647790009092D /* StationRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26B12A2647790009092D /* StationRepository */; };
 		742E26B42A26477E0009092D /* StationRepositoryLive in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26B32A26477E0009092D /* StationRepositoryLive */; };
 		742E26B72A26507E0009092D /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E26B62A26507E0009092D /* WidgetView.swift */; };
@@ -24,6 +23,7 @@
 		742E26D92A2666010009092D /* SelectStationIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 742E26BF2A2666000009092D /* SelectStationIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		742E26E02A2666450009092D /* DelaysWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 742E26A22A26013E0009092D /* DelaysWidget.intentdefinition */; };
 		742E26E32A2667700009092D /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 742E26E22A2667700009092D /* SharedModels */; };
+		742E26E52A266EC40009092D /* BGStation+fromName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742E26E42A266EC40009092D /* BGStation+fromName.swift */; };
 		74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74B48B632A11887D0061DD98 /* FavoritesServiceLive */; };
 		74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */; };
 		74FB4A692A13FAE000FD7290 /* LogServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74FB4A682A13FAE000FD7290 /* LogServiceLive */; };
@@ -86,6 +86,7 @@
 		742E26C32A2666000009092D /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		742E26C52A2666000009092D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		742E26CB2A2666010009092D /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
+		742E26E42A266EC40009092D /* BGStation+fromName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BGStation+fromName.swift"; sourceTree = "<group>"; };
 		74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A067207B29F31B96008A4D15 /* BDZDelays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BDZDelays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDZDelaysApp.swift; sourceTree = "<group>"; };
@@ -103,7 +104,6 @@
 			files = (
 				742E269C2A26013E0009092D /* SwiftUI.framework in Frameworks */,
 				742E26B42A26477E0009092D /* StationRepositoryLive in Frameworks */,
-				742E26B02A26476C0009092D /* StationDomain in Frameworks */,
 				742E269A2A26013E0009092D /* WidgetKit.framework in Frameworks */,
 				742E26B22A2647790009092D /* StationRepository in Frameworks */,
 			);
@@ -142,6 +142,7 @@
 				742E269E2A26013E0009092D /* DelaysWidgetBundle.swift */,
 				742E26A02A26013E0009092D /* DelaysWidget.swift */,
 				742E26B62A26507E0009092D /* WidgetView.swift */,
+				742E26E42A266EC40009092D /* BGStation+fromName.swift */,
 				742E26A32A26013F0009092D /* Assets.xcassets */,
 				742E26A52A26013F0009092D /* Info.plist */,
 			);
@@ -229,7 +230,6 @@
 			);
 			name = DelaysWidgetExtension;
 			packageProductDependencies = (
-				742E26AF2A26476C0009092D /* StationDomain */,
 				742E26B12A2647790009092D /* StationRepository */,
 				742E26B32A26477E0009092D /* StationRepositoryLive */,
 			);
@@ -388,6 +388,7 @@
 			files = (
 				742E26A62A26013F0009092D /* DelaysWidget.intentdefinition in Sources */,
 				742E26B72A26507E0009092D /* WidgetView.swift in Sources */,
+				742E26E52A266EC40009092D /* BGStation+fromName.swift in Sources */,
 				742E269F2A26013E0009092D /* DelaysWidgetBundle.swift in Sources */,
 				742E26A12A26013E0009092D /* DelaysWidget.swift in Sources */,
 			);
@@ -796,10 +797,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		742E26AF2A26476C0009092D /* StationDomain */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = StationDomain;
-		};
 		742E26B12A2647790009092D /* StationRepository */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = StationRepository;
