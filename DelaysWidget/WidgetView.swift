@@ -13,7 +13,7 @@ import SharedModels
 // MARK: - View
 
 struct WidgetView: View {
-    let entry: Provider.Entry
+    let entry: TrainsTimelineProvider.Entry
     
     @Environment(\.widgetFamily) private var size: WidgetFamily
     
@@ -179,7 +179,7 @@ struct WidgetView_Previews: PreviewProvider {
     
     static var previews: some View {
         ForEach(sizes, id: \.1) {
-            WidgetView(entry: SimpleEntry(
+            WidgetView(entry: TrainsEntry(
                 date: Date(),
                 configuration: SelectStationIntent(),
                 result: nil
