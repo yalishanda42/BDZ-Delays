@@ -35,12 +35,16 @@ struct WidgetView: View {
             
             switch entry.result {
             case let .some(.success(trains)) where trains.isEmpty:
+                Spacer()
                 Text("Няма влакове 6 часа напред.")
+                Spacer()
             case let .some(.success(trains)):
                 list(of: trains)
                 Spacer()
             case .some(.failure):
+                Spacer()
                 Text("Неуспешна връзка.")
+                Spacer()
             case .none:
                 list(of: placeholders)
                     .redacted(reason: .placeholder)
@@ -106,18 +110,22 @@ struct WidgetView: View {
     }
     
     private var placeholders: [TrainAtStation] {
-        Array(
-            repeating: TrainAtStation(
-                number: .init(type: .fast, number: 2112),
-                from: .bulgarian(.sofia),
-                to: .bulgarian(.varna),
-                schedule: .full(arrival: Date(), departure: Date()),
-                delay: nil,
-                movement: .notYetOperating
-            ),
-            count: rows
-        )
+        createPlaceholders(count: rows)
     }
+}
+
+fileprivate func createPlaceholders(count: Int) -> [TrainAtStation] {
+    Array(
+        repeating: TrainAtStation(
+            number: .init(type: .fast, number: 2112),
+            from: .bulgarian(.sofia),
+            to: .bulgarian(.varna),
+            schedule: .full(arrival: Date(), departure: Date()),
+            delay: nil,
+            movement: .notYetOperating
+        ),
+        count: count
+    )
 }
 
 fileprivate extension View {
@@ -177,6 +185,8 @@ struct WidgetView_Previews: PreviewProvider {
         (.systemExtraLarge, "XL"),
     ]
     
+    private struct TestError: Error {}
+    
     static var previews: some View {
         ForEach(sizes, id: \.1) {
             WidgetView(entry: TrainsEntry(
@@ -184,8 +194,38 @@ struct WidgetView_Previews: PreviewProvider {
                 configuration: SelectStationIntent(),
                 result: nil
             ))
-                .previewContext(WidgetPreviewContext(family: $0.0))
-                .previewDisplayName($0.1)
+            .previewContext(WidgetPreviewContext(family: $0.0))
+            .previewDisplayName("\($0.1): nil")
+        }
+        
+        ForEach(sizes, id: \.1) {
+            WidgetView(entry: TrainsEntry(
+                date: Date(),
+                configuration: SelectStationIntent(),
+                result: .success([])
+            ))
+            .previewContext(WidgetPreviewContext(family: $0.0))
+            .previewDisplayName("\($0.1): []")
+        }
+        
+        ForEach(sizes, id: \.1) {
+            WidgetView(entry: TrainsEntry(
+                date: Date(),
+                configuration: SelectStationIntent(),
+                result: .success(createPlaceholders(count: 5))
+            ))
+            .previewContext(WidgetPreviewContext(family: $0.0))
+            .previewDisplayName("\($0.1): [...]")
+        }
+        
+        ForEach(sizes, id: \.1) {
+            WidgetView(entry: TrainsEntry(
+                date: Date(),
+                configuration: SelectStationIntent(),
+                result: .failure(TestError())
+            ))
+            .previewContext(WidgetPreviewContext(family: $0.0))
+            .previewDisplayName("\($0.1): error")
         }
     }
 }

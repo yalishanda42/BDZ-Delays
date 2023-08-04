@@ -10,6 +10,8 @@ import SwiftUI
 import SearchStationView
 import SearchStationDomain
 
+import ComposableArchitecture
+
 // === List all live dependencies here ===
 import StationRepositoryLive
 import LocationServiceLive
@@ -20,12 +22,16 @@ import LogServiceLive
 
 @main
 struct BDZDelaysApp: App {
+    
+    private let store = Store(
+        initialState: SearchStationReducer.State(),
+        reducer: SearchStationReducer()._printChanges()
+    )
+    
     var body: some Scene {
         WindowGroup {
-            SearchStationView(store: .init(
-                initialState: .init(),
-                reducer: SearchStationReducer()._printChanges()
-            ))
+            SearchStationView(store: store)
+                .onOpenURL { DeepLinkHandler.handle(url: $0, store: ViewStore(store)) }
         }
     }
     

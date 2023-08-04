@@ -27,6 +27,7 @@
 		749D7F202A310A590088E161 /* TrainsTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749D7F1E2A310A590088E161 /* TrainsTimelineProvider.swift */; };
 		749D7F222A310A9D0088E161 /* TrainsEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749D7F212A310A9D0088E161 /* TrainsEntry.swift */; };
 		74B48B642A11887D0061DD98 /* FavoritesServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74B48B632A11887D0061DD98 /* FavoritesServiceLive */; };
+		74C48C682A34D1EA001E8F55 /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C48C672A34D1EA001E8F55 /* DeepLinkHandler.swift */; };
 		74ECD0952A0FED5000C577DD /* SettingsURLServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74ECD0942A0FED5000C577DD /* SettingsURLServiceLive */; };
 		74FB4A692A13FAE000FD7290 /* LogServiceLive in Frameworks */ = {isa = PBXBuildFile; productRef = 74FB4A682A13FAE000FD7290 /* LogServiceLive */; };
 		74FB4A6F2A15856B00FD7290 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */; };
@@ -91,6 +92,7 @@
 		742E26E42A266EC40009092D /* BGStation+fromName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BGStation+fromName.swift"; sourceTree = "<group>"; };
 		749D7F1E2A310A590088E161 /* TrainsTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainsTimelineProvider.swift; sourceTree = "<group>"; };
 		749D7F212A310A9D0088E161 /* TrainsEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainsEntry.swift; sourceTree = "<group>"; };
+		74C48C672A34D1EA001E8F55 /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
 		74FB4A6E2A1584CA00FD7290 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A067207B29F31B96008A4D15 /* BDZDelays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BDZDelays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDZDelaysApp.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 			children = (
 				742E26BA2A2664270009092D /* Info.plist */,
 				A067207E29F31B96008A4D15 /* BDZDelaysApp.swift */,
+				74C48C672A34D1EA001E8F55 /* DeepLinkHandler.swift */,
 				A08CED732A08EEDB00578D75 /* bdz-delays */,
 				A067208429F31B97008A4D15 /* BDZDelays.entitlements */,
 				A067208229F31B97008A4D15 /* Assets.xcassets */,
@@ -415,6 +418,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74C48C682A34D1EA001E8F55 /* DeepLinkHandler.swift in Sources */,
 				742E26A72A26013F0009092D /* DelaysWidget.intentdefinition in Sources */,
 				A067207F29F31B96008A4D15 /* BDZDelaysApp.swift in Sources */,
 			);
