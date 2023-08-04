@@ -33,21 +33,15 @@ struct WidgetView: View {
             .bold()
             .foregroundColor(.black)
             
-            switch entry.result {
-            case let .some(.success(trains)) where trains.isEmpty:
+            if entry.configuration.station != nil {
+                result(entry.result)
+            } else {
                 Spacer()
-                Text("Няма влакове 6 часа напред.")
-                Spacer()
-            case let .some(.success(trains)):
-                list(of: trains)
-                Spacer()
-            case .some(.failure):
-                Spacer()
-                Text("Неуспешна връзка.")
-                Spacer()
-            case .none:
-                list(of: placeholders)
-                    .redacted(reason: .placeholder)
+                Text("Изберете гара като задържите с пръст тук")
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.2)
+                    .foregroundColor(.teal)
+                    .padding()
                 Spacer()
             }
         }
@@ -60,6 +54,31 @@ struct WidgetView: View {
             return 19
         default:
             return 7
+        }
+    }
+    
+    @ViewBuilder
+    private func result(_ result:  Result<[TrainAtStation], Error>?) -> some View {
+        switch result {
+        case let .some(.success(trains)) where trains.isEmpty:
+            Spacer()
+            Text("Няма влакове 6 часа напред.")
+                .multilineTextAlignment(.center)
+                .padding()
+            Spacer()
+        case let .some(.success(trains)):
+            list(of: trains)
+            Spacer()
+        case .some(.failure):
+            Spacer()
+            Text("Неуспешна връзка.")
+                .multilineTextAlignment(.center)
+                .padding()
+            Spacer()
+        case .none:
+            list(of: placeholders)
+                .redacted(reason: .placeholder)
+            Spacer()
         }
     }
     
@@ -187,11 +206,27 @@ struct WidgetView_Previews: PreviewProvider {
     
     private struct TestError: Error {}
     
+    private static let sofiaEntry: SelectStationIntent = {
+        let result = SelectStationIntent()
+        result.station = "София"
+        return result
+    }()
+    
     static var previews: some View {
         ForEach(sizes, id: \.1) {
             WidgetView(entry: TrainsEntry(
                 date: Date(),
                 configuration: SelectStationIntent(),
+                result: nil
+            ))
+            .previewContext(WidgetPreviewContext(family: $0.0))
+            .previewDisplayName("\($0.1): init")
+        }
+        
+        ForEach(sizes, id: \.1) {
+            WidgetView(entry: TrainsEntry(
+                date: Date(),
+                configuration: sofiaEntry,
                 result: nil
             ))
             .previewContext(WidgetPreviewContext(family: $0.0))
@@ -201,7 +236,7 @@ struct WidgetView_Previews: PreviewProvider {
         ForEach(sizes, id: \.1) {
             WidgetView(entry: TrainsEntry(
                 date: Date(),
-                configuration: SelectStationIntent(),
+                configuration: sofiaEntry,
                 result: .success([])
             ))
             .previewContext(WidgetPreviewContext(family: $0.0))
@@ -211,7 +246,7 @@ struct WidgetView_Previews: PreviewProvider {
         ForEach(sizes, id: \.1) {
             WidgetView(entry: TrainsEntry(
                 date: Date(),
-                configuration: SelectStationIntent(),
+                configuration: sofiaEntry,
                 result: .success(createPlaceholders(count: 5))
             ))
             .previewContext(WidgetPreviewContext(family: $0.0))
@@ -221,7 +256,7 @@ struct WidgetView_Previews: PreviewProvider {
         ForEach(sizes, id: \.1) {
             WidgetView(entry: TrainsEntry(
                 date: Date(),
-                configuration: SelectStationIntent(),
+                configuration: sofiaEntry,
                 result: .failure(TestError())
             ))
             .previewContext(WidgetPreviewContext(family: $0.0))
