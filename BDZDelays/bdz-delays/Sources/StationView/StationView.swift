@@ -68,9 +68,13 @@ public struct StationView: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundColor(.red)
                 Text("Неуспешен опит за взимане на данните. Дали имате интернет?")
+                    .multilineTextAlignment(.center)
+                    .padding()
             }
         case .loaded where vs.trains.isEmpty:
             Text("Няма пътнически влакове за следващите 6 часа.")
+                .multilineTextAlignment(.center)
+                .padding()
         default:
             List(vs.trains) { train in
                 Section {
@@ -236,7 +240,24 @@ struct StationView_Previews: PreviewProvider {
                 }
             ))
         }.previewDisplayName("Loading")
+        
+        NavigationView {
+            StationView(store: .init(
+                initialState: .init(
+                    station: .gornaOryahovitsa
+                ),
+                reducer: StationReducer(),
+                prepareDependencies: {
+                    $0.context = .preview
+                    $0.stationRepository.fetchTrainsAtStation = { _ in
+                        throw TestError()
+                    }
+                }
+            ))
+        }.previewDisplayName("Errored")
     }
+    
+    private struct TestError: Error {}
     
     private static var testModels: [TrainAtStation] =
         [
