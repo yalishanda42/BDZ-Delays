@@ -17,7 +17,7 @@ import StationRepositoryLive
 import LocationServiceLive
 import SettingsURLServiceLive
 import FavoritesServiceLive
-import LogServiceLive
+import LogServiceLive  // exposes Firebase
 // =======================================
 
 @main
