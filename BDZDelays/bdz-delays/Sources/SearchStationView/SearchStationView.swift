@@ -204,59 +204,60 @@ extension BGStation: Identifiable {
 
 struct SearchStationView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchStationView(store: .init(
-            initialState: .init(),
-            reducer: SearchStationReducer()
-        )).previewDisplayName("Default")
+        SearchStationView(store: StoreOf<SearchStationReducer>(
+            initialState: .init()
+        ) {
+            SearchStationReducer()
+        }).previewDisplayName("Default")
         
-        SearchStationView(store: .init(
-            initialState: .init(),
-            reducer: SearchStationReducer(),
-            prepareDependencies: {
+        SearchStationView(store: StoreOf<SearchStationReducer>(
+            initialState: .init()
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
                 $0.locationService.statusStream = { AsyncStream {
                     $0.yield(.unableToUseLocation)
                 }}
-            }
-        )).previewDisplayName("No location")
+        }).previewDisplayName("No location")
         
-        SearchStationView(store: .init(
-            initialState: .init(),
-            reducer: SearchStationReducer(),
-            prepareDependencies: {
+        SearchStationView(store: StoreOf<SearchStationReducer>(
+            initialState: .init()
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
                 $0.locationService.statusStream = { AsyncStream {
                     $0.yield(.authorized(nearestStation: .dobrich))
                 }}
-            }
-        )).previewDisplayName("Use location")
+        }).previewDisplayName("Use location")
         
-        SearchStationView(store: .init(
-            initialState: .init(),
-            reducer: SearchStationReducer(),
-            prepareDependencies: {
+        SearchStationView(store: StoreOf<SearchStationReducer>(
+            initialState: .init()
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
                 $0.locationService.statusStream = { AsyncStream {
                     $0.yield(.denied)
                 }}
-            }
-        )).previewDisplayName("Denied location")
+        }).previewDisplayName("Denied location")
         
-        SearchStationView(store: .init(
-            initialState: .init(),
-            reducer: SearchStationReducer(),
-            prepareDependencies: {
+        SearchStationView(store: StoreOf<SearchStationReducer>(
+            initialState: .init()
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
                 $0.locationService.statusStream = { AsyncStream {
                     $0.yield(.determining)
                 }}
-            }
-        )).previewDisplayName("Determining location")
+        }).previewDisplayName("Determining location")
         
-        SearchStationView(store: .init(
-            initialState: .init(),
-            reducer: SearchStationReducer(),
-            prepareDependencies: {
+        SearchStationView(store: StoreOf<SearchStationReducer>(
+            initialState: .init()
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
                 $0.locationService.statusStream = { AsyncStream {
                     $0.yield(.authorized(nearestStation: nil))
                 }}
-            }
-        )).previewDisplayName("Use location, no station")
+        }).previewDisplayName("Use location, no station")
     }
 }

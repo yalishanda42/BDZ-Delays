@@ -48,8 +48,8 @@ let package = Package(
     // MARK: - Dependencies
     
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.52.0"),
-        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "0.4.2"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.0.0"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
         .package(url: "https://github.com/realm/realm-swift.git", from: "10.39.1"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.5.2"),

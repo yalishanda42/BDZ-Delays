@@ -23,15 +23,16 @@ import LogServiceLive
 @main
 struct BDZDelaysApp: App {
     
-    private let store = Store(
-        initialState: SearchStationReducer.State(),
-        reducer: SearchStationReducer()._printChanges()
-    )
+    private let store = StoreOf<SearchStationReducer>(
+        initialState: .init()
+    ) {
+        SearchStationReducer()._printChanges()
+    }
     
     var body: some Scene {
         WindowGroup {
             SearchStationView(store: store)
-                .onOpenURL { DeepLinkHandler.handle(url: $0, store: ViewStore(store)) }
+                .onOpenURL { DeepLinkHandler.handle(url: $0, store: store) }
         }
     }
     

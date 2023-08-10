@@ -197,63 +197,55 @@ fileprivate extension Date {
 struct StationView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            StationView(store: .init(
-                initialState: .init(
-                    station: .gornaOryahovitsa
-                ),
-                reducer: StationReducer(),
-                prepareDependencies: {
-                    $0.context = .preview
-                    $0.stationRepository.fetchTrainsAtStation = { _ in
-                        testModels
-                    }
+            StationView(store: StoreOf<StationReducer>(
+                initialState: .init(station: .gornaOryahovitsa)
+            ) {
+                StationReducer()
+            } withDependencies: {
+                $0.context = .preview
+                $0.stationRepository.fetchTrainsAtStation = { _ in
+                    testModels
                 }
-            ))
+            })
         }.previewDisplayName("Full list")
         
         NavigationView {
-            StationView(store: .init(
-                initialState: .init(
-                    station: .gornaOryahovitsa
-                ),
-                reducer: StationReducer(),
-                prepareDependencies: {
-                    $0.context = .preview
-                }
-            ))
+            StationView(store: StoreOf<StationReducer>(
+                initialState: .init(station: .gornaOryahovitsa)
+            ) {
+                StationReducer()
+            } withDependencies: {
+                $0.context = .preview
+            })
         }.previewDisplayName("Empty list")
         
         NavigationView {
-            StationView(store: .init(
-                initialState: .init(
-                    station: .gornaOryahovitsa
-                ),
-                reducer: StationReducer(),
-                prepareDependencies: {
-                    $0.context = .preview
-                    $0.stationRepository.fetchTrainsAtStation = { _ in
-                        for await _ in TestClock().timer(interval: .seconds(420)) {
-                            return testModels
-                        }
-                        return []
+            StationView(store: StoreOf<StationReducer>(
+                initialState: .init(station: .gornaOryahovitsa)
+            ) {
+                StationReducer()
+            } withDependencies: {
+                $0.context = .preview
+                $0.stationRepository.fetchTrainsAtStation = { _ in
+                    for await _ in TestClock().timer(interval: .seconds(420)) {
+                        return testModels
                     }
+                    return []
                 }
-            ))
+            })
         }.previewDisplayName("Loading")
         
         NavigationView {
-            StationView(store: .init(
-                initialState: .init(
-                    station: .gornaOryahovitsa
-                ),
-                reducer: StationReducer(),
-                prepareDependencies: {
-                    $0.context = .preview
-                    $0.stationRepository.fetchTrainsAtStation = { _ in
-                        throw TestError()
-                    }
+            StationView(store: StoreOf<StationReducer>(
+                initialState: .init(station: .gornaOryahovitsa)
+            ) {
+                StationReducer()
+            } withDependencies: {
+                $0.context = .preview
+                $0.stationRepository.fetchTrainsAtStation = { _ in
+                    throw TestError()
                 }
-            ))
+            })
         }.previewDisplayName("Errored")
     }
     

@@ -17,7 +17,7 @@ import SettingsURLService
 import FavoritesService
 import LogService
 
-public struct SearchStationReducer: ReducerProtocol {
+public struct SearchStationReducer: Reducer {
     
     public let allStations: [BGStation]
     
@@ -83,7 +83,7 @@ public struct SearchStationReducer: ReducerProtocol {
     @Dependency(\.favoritesService) var favoritesService
     @Dependency(\.log) var log
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
@@ -163,18 +163,18 @@ public struct SearchStationReducer: ReducerProtocol {
                 switch state.locationStatus {
                 case .notYetAskedForAuthorization:
                     state.locationStatus = .determining
-                    return .fireAndForget {
+                    return .run { _ in
                         await locationService.requestAuthorization()
                     }
                 case .denied:
-                    return .fireAndForget {
+                    return .run { _ in
                         await settingsService.openSettings()
                     }
                 case .authorized(nearestStation: .some(let station)):
                     return .send(.selectStation(station))
                 case .authorized(nearestStation: .none):
                     state.locationStatus = .determining
-                    return .fireAndForget {
+                    return .run { _ in
                         await locationService.manuallyRefreshStatus()
                     }
                 case .determining, .unableToUseLocation:

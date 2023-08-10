@@ -12,7 +12,7 @@ import SharedModels
 import StationRepository
 import LogService
 
-public struct StationReducer: ReducerProtocol {
+public struct StationReducer: Reducer {
     
     public struct State: Equatable {
         public let station: BGStation
@@ -57,7 +57,7 @@ public struct StationReducer: ReducerProtocol {
     
     public init() {}
     
-    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    public func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .task:
             return .run { send in
@@ -92,11 +92,11 @@ public struct StationReducer: ReducerProtocol {
             
             state.loadingState = .loading
             
-            return .task { [station = state.station] in
-                await .receive(TaskResult {
+            return .run { [station = state.station] send in
+                await send(.receive(TaskResult {
                     try await stationRepository.fetchTrainsAtStation(station)
-                })
-            }.cancellable(id: TrainsTaskCancelID.self)
+                }))
+            }.cancellable(id: TrainsTaskCancelID())
             
         case .receive(.success(let trains)):
             state.lastUpdateTime = now
@@ -108,13 +108,13 @@ public struct StationReducer: ReducerProtocol {
             log.error(error, "Faied to fetch trains data for station \(state.station).")
             
         case .finalize:
-            return .cancel(id: TrainsTaskCancelID.self)
+            return .cancel(id: TrainsTaskCancelID())
         }
         
         return .none
     }
     
-    private enum TrainsTaskCancelID {}
+    private struct TrainsTaskCancelID: Hashable {}
 }
 
 public extension StationReducer.State {

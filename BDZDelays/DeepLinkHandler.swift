@@ -14,7 +14,7 @@ import SearchStationDomain
 import LogServiceLive
 
 enum DeepLinkHandler {
-    static func handle(url: URL, store: ViewStoreOf<SearchStationReducer>) {
+    static func handle(url: URL, store: StoreOf<SearchStationReducer>) {
         @Dependency(\.log) var log
         log.info("Received URL: \(url)")
         
