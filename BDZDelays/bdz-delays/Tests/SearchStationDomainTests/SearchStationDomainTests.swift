@@ -9,9 +9,10 @@ final class SearchStationDomainTests: XCTestCase {
         let query = "соф"
         
         let store = TestStore(
-            initialState: SearchStationReducer.State(),
-            reducer: SearchStationReducer(allStations: [.sofia, .dobrich])
-        )
+            initialState: SearchStationReducer.State()
+        ) {
+            SearchStationReducer(allStations: [.sofia, .dobrich])
+        }
         
         await store.send(.updateQuery(query)) {
             $0.query = query
@@ -23,9 +24,10 @@ final class SearchStationDomainTests: XCTestCase {
         let query = "asdfg"
         
         let store = TestStore(
-            initialState: SearchStationReducer.State(),
-            reducer: SearchStationReducer(allStations: [.sofia, .dobrich])
-        )
+            initialState: SearchStationReducer.State()
+        ) {
+            SearchStationReducer(allStations: [.sofia, .dobrich])
+        }
         
         await store.send(.updateQuery(query)) {
             $0.query = query
@@ -40,9 +42,10 @@ final class SearchStationDomainTests: XCTestCase {
         ]
         
         let store = TestStore(
-            initialState: SearchStationReducer.State(filteredStations: all),
-            reducer: SearchStationReducer(allStations: all)
-        )
+            initialState: SearchStationReducer.State(filteredStations: all)
+        ) {
+            SearchStationReducer(allStations: all)
+        }
         
         await store.send(.updateQuery(query)) // no modification expected
     }
@@ -52,9 +55,10 @@ final class SearchStationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: SearchStationReducer.State(
                 locationStatus: .notYetAskedForAuthorization
-            ),
-            reducer: SearchStationReducer()
+            )
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.locationService.requestAuthorization = {
                 await serviceSpy.call()
             }
@@ -73,9 +77,10 @@ final class SearchStationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: SearchStationReducer.State(
                 locationStatus: .authorized(nearestStation: nil)
-            ),
-            reducer: SearchStationReducer()
+            )
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.locationService.manuallyRefreshStatus = {
                 await serviceSpy.call()
             }
@@ -94,9 +99,10 @@ final class SearchStationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: SearchStationReducer.State(
                 locationStatus: .denied
-            ),
-            reducer: SearchStationReducer()
+            )
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.settingsService.openSettings = {
                 await serviceSpy.call()
             }
@@ -120,9 +126,10 @@ final class SearchStationDomainTests: XCTestCase {
         let clock = TestClock()
         let counter = Spy()
         let store = TestStore(
-            initialState: SearchStationReducer.State(),
-            reducer: SearchStationReducer()
+            initialState: SearchStationReducer.State()
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.locationService.statusStream = {
                 AsyncStream {
                     for await _ in clock.timer(interval: .seconds(1)) {
@@ -153,9 +160,10 @@ final class SearchStationDomainTests: XCTestCase {
         let expected: [BGStation] = [.dobrich, .povelyanovo, .sofia]
         
         let store = TestStore(
-            initialState: SearchStationReducer.State(),
-            reducer: SearchStationReducer()
+            initialState: SearchStationReducer.State()
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.favoritesService.loadFavorites = { expected }
             $0.locationService.statusStream = { AsyncStream { _ in /* never */ } }
         }
@@ -173,9 +181,10 @@ final class SearchStationDomainTests: XCTestCase {
         let spy = Spy()
         
         let store = TestStore(
-            initialState: SearchStationReducer.State(),
-            reducer: SearchStationReducer()
+            initialState: SearchStationReducer.State()
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.favoritesService.saveFavorites = { _ in
                 await spy.call()
             }
@@ -205,9 +214,10 @@ final class SearchStationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: SearchStationReducer.State(
                 favoriteStations: initial
-            ),
-            reducer: SearchStationReducer()
+            )
         ) {
+            SearchStationReducer()
+        } withDependencies: {
             $0.favoritesService.saveFavorites = { _ in
                 await spy.call()
             }

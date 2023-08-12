@@ -11,9 +11,10 @@ final class StationDomainTests: XCTestCase {
         let expected = Self.expectedOne
 
         let store = TestStore(
-            initialState: .init(station: .sofia),
-            reducer: StationReducer()
+            initialState: .init(station: .sofia)
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.stationRepository = StationRepository(
                 fetchTrainsAtStation: { _ in expected }
             )
@@ -39,9 +40,10 @@ final class StationDomainTests: XCTestCase {
                 loadingState: .loaded,
                 trains: Self.expectedOne,
                 lastUpdateTime: Self.dateOne
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.stationRepository = StationRepository(
                 fetchTrainsAtStation: { _ in throw error }
             )
@@ -66,9 +68,10 @@ final class StationDomainTests: XCTestCase {
                 loadingState: .loaded,
                 trains: Self.expectedOne,
                 lastUpdateTime: Self.dateOne
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.stationRepository = StationRepository(
                 fetchTrainsAtStation: { _ in expected }
             )
@@ -94,9 +97,10 @@ final class StationDomainTests: XCTestCase {
         let store = TestStore(
             initialState: .init(
                 station: .sofia
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.stationRepository = StationRepository(
                 fetchTrainsAtStation: { _ in
                     let count = await counter.incremented()
@@ -139,9 +143,10 @@ final class StationDomainTests: XCTestCase {
             initialState: .init(
                 station: .sofia,
                 lastUpdateTime: Date(timeIntervalSinceReferenceDate: 51)
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.date.now = dateInNextMinute
             $0.calendar = Calendar(identifier: .gregorian)
             $0.stationRepository.fetchTrainsAtStation = { _ in [] }
@@ -165,9 +170,10 @@ final class StationDomainTests: XCTestCase {
             initialState: .init(
                 station: .sofia,
                 lastUpdateTime: Date(timeIntervalSinceReferenceDate: 51)
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.date.now = Date(timeIntervalSinceReferenceDate: 52)
             $0.calendar = Calendar(identifier: .gregorian)
             $0.stationRepository.fetchTrainsAtStation = { _ in [] }
@@ -183,9 +189,10 @@ final class StationDomainTests: XCTestCase {
             initialState: .init(
                 station: .sofia,
                 lastUpdateTime: nil
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.date.now = dateInNextMinute
             $0.calendar = Calendar(identifier: .gregorian)
             $0.stationRepository.fetchTrainsAtStation = { _ in [] }
@@ -212,9 +219,10 @@ final class StationDomainTests: XCTestCase {
                 station: .sofia,
                 loadingState: .failed,
                 lastUpdateTime: Date(timeIntervalSinceReferenceDate: 51)
-            ),
-            reducer: StationReducer()
+            )
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.date.now = dateInNextMinute
             $0.calendar = Calendar(identifier: .gregorian)
             $0.stationRepository.fetchTrainsAtStation = { _ in [] }
@@ -227,9 +235,10 @@ final class StationDomainTests: XCTestCase {
         let clock = TestClock()
 
         let store = TestStore(
-            initialState: .init(station: .sofia),
-            reducer: StationReducer()
+            initialState: .init(station: .sofia)
         ) {
+            StationReducer()
+        } withDependencies: {
             $0.stationRepository = StationRepository(
                 fetchTrainsAtStation: { _ in
                     for await _ in clock.timer(interval: .seconds(1)) {
