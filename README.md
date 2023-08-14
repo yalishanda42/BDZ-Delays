@@ -6,7 +6,7 @@
 
 Приложението използва [The Composable Architecture (TCA)](https://github.com/pointfreeco/swift-composable-architecture), като е разделено по модули, базирани както на функционалност, така и на слоеве (т.е. и "хоризонтално", и "вертикално"), доколкото има смисъл да бъде приложимо. За модуляризацията е използван Swift Package Manager пакет ([bdz-delays](./BDZDelays/bdz-delays/)). Следната схема илюстрира най-добре избраната композиция по модули:
 
-![Архитектура](./assets/spm-package-dependencies.svg)
+![Архитектура](./assets/dependencies.svg)
 
 ## Принос към проекта
 
