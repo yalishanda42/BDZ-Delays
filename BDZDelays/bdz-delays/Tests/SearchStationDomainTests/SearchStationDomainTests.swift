@@ -230,6 +230,46 @@ final class SearchStationDomainTests: XCTestCase {
         let invocations = await spy.calls
         XCTAssertEqual(invocations, 1)
     }
+    
+    func test_refresh_onAllowedLocationButUnknownStaton_refreshesLocationStatus() async throws {
+        let serviceSpy = Spy()
+        let store = TestStore(
+            initialState: SearchStationReducer.State(
+                locationStatus: .authorized(nearestStation: nil)
+            )
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
+            $0.locationService.manuallyRefreshStatus = {
+                await serviceSpy.call()
+            }
+        }
+        
+        await store.send(.refresh)
+        
+        let calls = await serviceSpy.calls
+        XCTAssertEqual(calls, 1)
+    }
+    
+    func test_refresh_onAllowedLocationAndKnownStaton_doesNotRefresh() async throws {
+        let serviceSpy = Spy()
+        let store = TestStore(
+            initialState: SearchStationReducer.State(
+                locationStatus: .authorized(nearestStation: .sofia)
+            )
+        ) {
+            SearchStationReducer()
+        } withDependencies: {
+            $0.locationService.manuallyRefreshStatus = {
+                await serviceSpy.call()
+            }
+        }
+        
+        await store.send(.refresh)
+        
+        let calls = await serviceSpy.calls
+        XCTAssertEqual(calls, 0)
+    }
 }
 
 private actor Spy {

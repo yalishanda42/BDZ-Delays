@@ -68,6 +68,8 @@ public struct SearchStationReducer: Reducer {
         case locationStatusUpdate(LocationStatus)
         case locationAction
         
+        case refresh
+        
         /// To be send from the `.task` view modifier.
         /// Used for executing a long-running effect for
         /// as long as the view is alive.
@@ -180,6 +182,15 @@ public struct SearchStationReducer: Reducer {
                 case .determining, .unableToUseLocation:
                     return .none
                 }
+                
+            case .refresh:
+                if state.locationStatus == .authorized(nearestStation: nil) {
+                    return .run { send in
+                        await locationService.manuallyRefreshStatus()
+                    }
+                }
+                
+                return .none
                 
             case .stationAction(let childAction):
                 // Child screen

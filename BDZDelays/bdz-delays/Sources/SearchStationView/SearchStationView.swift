@@ -116,7 +116,11 @@ private struct MasterView: View {
                     }
                 }
             }
-        }.navigationTitle("ЖП Гари")
+        }
+        .navigationTitle("ЖП Гари")
+        .refreshable {
+            await vs.send(.refresh).finish()
+        }
     }
 }
 
