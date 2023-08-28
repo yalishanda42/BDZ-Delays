@@ -26,10 +26,10 @@ public struct SearchStationView: View {
             NavigationSplitView {
                 MasterView(vs: vs)
             } detail: {
-                if let selected = vs.stationState {
+                if let selected = vs.stationDetailsState {
                     StationView(store: store.scope(
                         state: { _ in selected },
-                        action: SearchStationReducer.Action.stationAction
+                        action: { .stationAction(.presented($0)) }
                     ))
                 } else {
                     Text("Изберете гара, за която да се покаже информация за спиращите и тръгващите влакове в следващите 6 часа.")
@@ -53,7 +53,7 @@ private struct MasterView: View {
 
     var body: some View {
         List(selection: Binding<BGStation?>(
-            get: { vs.stationState?.station },
+            get: { vs.stationDetailsState?.station },
             set: { vs.send(.selectStation($0)) }
         )) {
             if vs.locationStatus != .unableToUseLocation

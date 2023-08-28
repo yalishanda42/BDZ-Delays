@@ -31,21 +31,21 @@ public struct SearchStationReducer: Reducer {
         public var query: String
         public var locationStatus: LocationStatus
         
-        // Child screen
-        public var stationState: StationReducer.State?
+        @PresentationState
+        public var stationDetailsState: StationReducer.State?
         
         public init(
             filteredStations: [BGStation] = BGStation.allCases,
             favoriteStations: [BGStation] = [],
             query: String = "",
             locationStatus: LocationStatus = .unableToUseLocation,
-            selectedStation: StationReducer.State? = nil
+            stationDetailsState: StationReducer.State? = nil
         ) {
             self.filteredStations = filteredStations
             self.favoriteStations = favoriteStations
             self.query = query
             self.locationStatus = locationStatus
-            self.stationState = selectedStation
+            self.stationDetailsState = stationDetailsState
         }
         
         public var isSearching: Bool {
@@ -75,7 +75,7 @@ public struct SearchStationReducer: Reducer {
         case task
         
         /// Child screen action
-        case stationAction(StationReducer.Action)
+        case stationAction(PresentationAction<StationReducer.Action>)
     }
     
     @Dependency(\.locationService) var locationService
@@ -123,16 +123,16 @@ public struct SearchStationReducer: Reducer {
                 
             case .selectStation(let station):
                 guard let new = station else {
-                    return .send(.stationAction(.finalize))
+                    return .send(.stationAction(.presented(.finalize)))
                 }
                 
-                guard new != state.stationState?.station else {
+                guard new != state.stationDetailsState?.station else {
                     // the station is already selected
                     return .none
                 }
                 
-                state.stationState = .init(station: new)
-                return .send(.stationAction(.refresh))
+                state.stationDetailsState = .init(station: new)
+                return .send(.stationAction(.presented(.refresh)))
                 
             case .loadSavedStations(let statons):
                 state.favoriteStations = statons
@@ -183,13 +183,13 @@ public struct SearchStationReducer: Reducer {
                 
             case .stationAction(let childAction):
                 // Child screen
-                if case .finalize = childAction {
-                    state.stationState = nil
+                if case .presented(.finalize) = childAction {
+                    state.stationDetailsState = nil
                 }
                 
                 return .none
             }
-        }.ifLet(\.stationState, action: /Action.stationAction) {
+        }.ifLet(\.$stationDetailsState, action: /Action.stationAction) {
             StationReducer()
         }
     }
