@@ -1,5 +1,7 @@
 # БДЖ Закъснения
 
+[![App Store](https://img.shields.io/badge/App_Store-0D96F6?style=for-the-badge&logo=app-store&logoColor=white)](https://apps.apple.com/us/app/бдж-закъснения/id6449440775)
+
 Този iOS и macOS апп предоставя информация за пристигащите и заминаващите влакове до и от всяка гара в страната, с актулна информация за тяхното закъснение в минути.
 
 ## Архитектура
